@@ -80,7 +80,7 @@ class AuthBloc{
         SharedPrefService.instance.setString(AppConstants.user, userJson);
         SharedPrefService.instance.setString(AppConstants.accessToken, idToken??"");
         userDetails = await getUserDetails();
-        Navigator.pushNamed(context, DashboardScreen.path);
+        Navigator.pushReplacementNamed(context, DashboardScreen.path);
       } catch (apiError) {
         print('⚠️ Backend API call failed: $apiError');
         // Continue anyway - user is authenticated with Firebase

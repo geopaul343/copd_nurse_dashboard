@@ -21,8 +21,8 @@ class LoggingInterceptor extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     try {
-      log(jsonEncode(response.data).toString());
-      return response.data['status'] as bool
+     // log(jsonEncode(response.data).toString());
+      return response.statusCode == 200 || response.statusCode == 201
           ? super.onResponse(response, handler)
           : handler.reject(DioException(
           requestOptions: response.requestOptions,

@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:admin_dashboard/data/model/search_user_model.dart';
 import 'package:admin_dashboard/data/repository/dashboard/dashboard_repo.dart';
 
 import '../../../di/di.dart';
@@ -23,16 +24,9 @@ class DashBoardRepoImpl extends DashBoardRepo{
          Urls.search,
          queryParameters: queryParams
      );
-     if (response.statusCode == 200) {
-       final data = jsonDecode(response.data);
-       print(response.data);
-       return data['access_token']; // Use this with Google Cloud API
-     } else {
-       print("Failed to exchange token: ${response.data}");
-       return null;
-     }
+       return SearchResponse.fromJson(response.data); // Use this with Google Cloud API
    }catch (e){
-     print("sssss");
+     print("Erorr ====> ${e.toString()}");
    }
   }
 

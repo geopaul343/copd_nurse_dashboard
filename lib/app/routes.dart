@@ -1,6 +1,9 @@
 
+import 'package:admin_dashboard/data/model/search_user_model.dart';
 import 'package:admin_dashboard/ui/screens/auth/login_screen.dart';
 import 'package:admin_dashboard/ui/screens/dashboard/dashboard_screen.dart';
+import 'package:admin_dashboard/ui/screens/patient/patient_detail_screen.dart';
+import 'package:admin_dashboard/ui/screens/patient/patients_list_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +20,12 @@ class Routes {
         return pageRoute(settings, const LoginScreen());
       case DashboardScreen.path:
         return pageRoute(settings, const DashboardScreen());
+      case PatientsListScreen.path:
+        String searchQuery = settings.arguments as String;
+        return pageRoute(settings, PatientsListScreen(searchQuery: searchQuery)); 
+        case PatientDetailScreen.path:
+        PatientUser userDetail = settings.arguments as PatientUser;
+        return pageRoute(settings, PatientDetailScreen(userDetail: userDetail));
       default:
         return pageRoute(
             settings,
