@@ -2,9 +2,14 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../app/app_constants.dart';
 import '../../app/helper/shared_preference_helper.dart';
+import '../../di/di.dart';
+import '../../ui/screens/auth/login_screen.dart';
+import '../../ui/widgets/custom_snackbar.dart';
+import 'dio_client.dart';
 
 class LoggingInterceptor extends Interceptor {
   @override
@@ -21,7 +26,7 @@ class LoggingInterceptor extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     try {
-     // log(jsonEncode(response.data).toString());
+      //log("${jsonEncode(response.data)}wwwwwppppppppp");
       return response.statusCode == 200 || response.statusCode == 201
           ? super.onResponse(response, handler)
           : handler.reject(DioException(
@@ -41,14 +46,19 @@ class LoggingInterceptor extends Interceptor {
   }
 
   @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
-    print("eroor===>${err.requestOptions.baseUrl}, ${err.requestOptions.path} ,${err.requestOptions.uri}");
-    log(jsonEncode(err.requestOptions.baseUrl));
-    log(jsonEncode(err.requestOptions.path));
-    log(jsonEncode(err.requestOptions.uri));
-    super.onError(err, handler);
+  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
+    print("eroor===>${err.requestOptions.baseUrl}, ${err.requestOptions.data} ,${err.requestOptions.uri}");
+    print("eroor===>11${err.message}, ${err.response?.data} ,${err.stackTrace}");
+    if (err.response?.statusCode == 401) {
+      SnackBarCustom.failure("Session Expired");
+      await SharedPrefService.instance.clearPrefs();
+      Navigator.pushReplacementNamed(AppConstants.globalNavigatorKey.currentContext!, LoginScreen.path);
+    }
+     super.onError(err, handler);
   }
 }
+
+
 
 // class TokenRefreshInterceptor extends Interceptor {
 //   final Dio dio;

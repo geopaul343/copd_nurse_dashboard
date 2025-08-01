@@ -79,6 +79,7 @@ class AuthBloc{
        String userJson = jsonEncode(userDetail.toJson());
         SharedPrefService.instance.setString(AppConstants.user, userJson);
         SharedPrefService.instance.setString(AppConstants.accessToken, idToken??"");
+        SharedPrefService.instance.setString(AppConstants.userId, userCredential.user?.uid??"");
         userDetails = await getUserDetails();
         Navigator.pushReplacementNamed(context, DashboardScreen.path);
       } catch (apiError) {
@@ -121,6 +122,7 @@ class AuthBloc{
       print('No user details found in SharedPreferences');
     }
   }
+
 
   Future<void> clearUserDetails() async {
     // final prefs = await SharedPrefService.instance;

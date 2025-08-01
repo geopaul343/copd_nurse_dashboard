@@ -7,6 +7,7 @@ import 'package:admin_dashboard/ui/screens/patient/patients_list_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../ui/screens/patient/patient_helth_checkup_details_screen.dart';
 import '../ui/screens/splash/splash.dart';
 
 class Routes {
@@ -26,6 +27,9 @@ class Routes {
         case PatientDetailScreen.path:
         PatientUser userDetail = settings.arguments as PatientUser;
         return pageRoute(settings, PatientDetailScreen(userDetail: userDetail));
+      case PatientHealthCheckupDetailsScreen.path:
+        String patientId = settings.arguments as String;
+        return pageRoute(settings, PatientHealthCheckupDetailsScreen(patientId: patientId));
       default:
         return pageRoute(
             settings,

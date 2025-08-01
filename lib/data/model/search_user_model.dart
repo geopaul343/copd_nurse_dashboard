@@ -20,12 +20,11 @@ class SearchResponse {
         if (usersList != null) {
           for (int i = 0; i < usersList.length; i++) {
             try {
-              final user = PatientUser.fromJson(usersList[i]);
+              final user = PatientUser.fromJson(usersList[i] as Map<String, dynamic>);
               users.add(user);
             } catch (e) {
               print('❌ Error parsing user at index $i: $e');
               print('❌ User data: ${usersList[i]}');
-              // Skip this user and continue with others
             }
           }
         }
@@ -40,7 +39,6 @@ class SearchResponse {
     } catch (e) {
       print('❌ Error parsing SearchResponse: $e');
       print('❌ JSON data: $json');
-      // Return a minimal valid SearchResponse
       return SearchResponse(
         message: json['message'] ?? 'Error parsing response',
         nextPageToken: json['next_page_token'],
@@ -80,20 +78,20 @@ class PatientUser {
   final String? status;
   final bool? isUserActive;
   final String? anyRecommends;
-  final String? copdActionPlan;
-  final String? copdDiagnosed;
-  final String? doYouHavePulseOximeter;
-  final String? emergencyContactName;
-  final String? fluVaccinated;
-  final String? homeOxygenEnabled;
+  final Map<String, dynamic>? copdActionPlan;
+  final Map<String, dynamic>? copdDiagnosed;
+  final Map<String, dynamic>? doYouHavePulseOximeter;
+  final Map<String, dynamic>? emergencyContactName;
+  final Map<String, dynamic>? fluVaccinated;
+  final Map<String, dynamic>? homeOxygenEnabled;
   final int? hospitalAdmissionsLast12m;
-  final String? inhalerType;
+  final Map<String, dynamic>? inhalerType;
   final String? isDoHaveDigitalStethoscope;
   final bool? isFlareUpsNonHospital;
-  final String? otherCondition;
+  final Map<String, dynamic>? otherCondition;
   final int? pageNumber;
-  final String? rescuepackAtHome;
-  final String? smokingStatus;
+  final Map<String, dynamic>? rescuepackAtHome;
+  final Map<String, dynamic>? smokingStatus;
   final String? createdAt;
   final String? updatedAt;
 
@@ -132,117 +130,71 @@ class PatientUser {
 
   factory PatientUser.fromJson(Map<String, dynamic> json) {
     try {
-      // Parse each field individually to identify the problematic one
-      final id = json['user_id'] ?? json['id'] ?? '';
-      final name = json['name'] ?? '';
-      final email = json['email'];
-      final phone = json['phone'];
-      final address = json['address'];
-      final dateOfBirth =
-          json['dateofbirth'] ?? json['date_of_birth'] ?? json['dateOfBirth'];
-      final gender = json['gender'];
-      final medicalHistory = json['medical_history'] ?? json['medicalHistory'];
-      final vitalSigns = json['vital_signs'] ?? json['vitalSigns'];
-      final lastVisit = json['last_visit'] ?? json['lastVisit'];
-      final nextAppointment =
-          json['next_appointment'] ?? json['nextAppointment'];
-      final status = json['status'];
-      final isUserActive = json['is_user_active'];
-      final anyRecommends = json['any_recommends'];
-      final copdActionPlan = json['copd_action_plan'];
-      final copdDiagnosed = json['copd_diagnosed'];
-      final doYouHavePulseOximeter = json['do_you_have_pulse_oximeter'];
-      final emergencyContactName = json['emergency_contact_name'];
-      final fluVaccinated = json['flu_vaccinated'];
-      final homeOxygenEnabled = json['home_oxygen_enabled'];
-      final hospitalAdmissionsLast12m = json['hospital_admissions_last_12m'];
-      final inhalerType = json['inhaler_type'];
-      final isDoHaveDigitalStethoscope = json['is_do_have_digital_stethoscope'];
-
-      // Handle boolean fields carefully
-      bool? isFlareUpsNonHospital;
-      try {
-        isFlareUpsNonHospital = json['is_flare_ups_non_hospital'];
-      } catch (e) {
-        print('❌ Error parsing is_flare_ups_non_hospital: $e');
-        isFlareUpsNonHospital = null;
-      }
-
-      final otherCondition = json['other_condition'];
-      final pageNumber = json['page_number'];
-      final rescuepackAtHome = json['rescuepack_at_home'];
-      final smokingStatus = json['smoking_status'];
-      final createdAt = json['created_at'];
-      final updatedAt = json['updated_at'];
-
       return PatientUser(
-        id: id,
-        name: name,
-        email: email,
-        phone: phone,
-        address: address,
-        dateOfBirth: dateOfBirth,
-        gender: gender,
-        medicalHistory: medicalHistory,
-        vitalSigns: vitalSigns,
-        lastVisit: lastVisit,
-        nextAppointment: nextAppointment,
-        status: status,
-        isUserActive: isUserActive,
-        anyRecommends: anyRecommends,
-        copdActionPlan: copdActionPlan,
-        copdDiagnosed: copdDiagnosed,
-        doYouHavePulseOximeter: doYouHavePulseOximeter,
-        emergencyContactName: emergencyContactName,
-        fluVaccinated: fluVaccinated,
-        homeOxygenEnabled: homeOxygenEnabled,
-        hospitalAdmissionsLast12m: hospitalAdmissionsLast12m,
-        inhalerType: inhalerType,
-        isDoHaveDigitalStethoscope: isDoHaveDigitalStethoscope,
-        isFlareUpsNonHospital: isFlareUpsNonHospital,
-        otherCondition: otherCondition,
-        pageNumber: pageNumber,
-        rescuepackAtHome: rescuepackAtHome,
-        smokingStatus: smokingStatus,
-        createdAt: createdAt,
-        updatedAt: updatedAt,
-      );
-    } catch (e) {
-      print('❌ Error parsing PatientUser from JSON: $e');
-      print('❌ JSON data: $json');
-      // Return a minimal valid PatientUser object
-      return PatientUser(
-        id: json['user_id'] ?? json['id'] ?? 'unknown',
-        name: json['name'] ?? 'Unknown Patient',
-        email: json['email'],
-        phone: json['phone'],
-        address: json['address'],
-        dateOfBirth:
-            json['dateofbirth'] ?? json['date_of_birth'] ?? json['dateOfBirth'],
-        gender: json['gender'],
+        id: json['user_id'] ?? json['id'] ?? '',
+        name: json['name'] ?? '',
+        email: json['email'] as String?,
+        phone: json['phone'] as String?,
+        address: json['address'] as String?,
+        dateOfBirth: json['dateofbirth'] ?? json['date_of_birth'] ?? json['dateOfBirth'],
+        gender: json['gender'] as String?,
         medicalHistory: json['medical_history'] ?? json['medicalHistory'],
         vitalSigns: json['vital_signs'] ?? json['vitalSigns'],
         lastVisit: json['last_visit'] ?? json['lastVisit'],
         nextAppointment: json['next_appointment'] ?? json['nextAppointment'],
-        status: json['status'],
-        isUserActive: json['is_user_active'],
-        anyRecommends: json['any_recommends'],
-        copdActionPlan: json['copd_action_plan'],
-        copdDiagnosed: json['copd_diagnosed'],
-        doYouHavePulseOximeter: json['do_you_have_pulse_oximeter'],
-        emergencyContactName: json['emergency_contact_name'],
-        fluVaccinated: json['flu_vaccinated'],
-        homeOxygenEnabled: json['home_oxygen_enabled'],
-        hospitalAdmissionsLast12m: json['hospital_admissions_last_12m'],
-        inhalerType: json['inhaler_type'],
-        isDoHaveDigitalStethoscope: json['is_do_have_digital_stethoscope'],
-        isFlareUpsNonHospital: null, // Set to null to avoid the error
-        otherCondition: json['other_condition'],
-        pageNumber: json['page_number'],
-        rescuepackAtHome: json['rescuepack_at_home'],
-        smokingStatus: json['smoking_status'],
-        createdAt: json['created_at'],
-        updatedAt: json['updated_at'],
+        status: json['status'] as String?,
+        isUserActive: json['is_user_active'] as bool?,
+        anyRecommends: json['any_recommends'] as String?,
+        copdActionPlan: json['copd_action_plan'] as Map<String, dynamic>?, // Changed to Map
+        copdDiagnosed: json['copd_diagnosed'] as Map<String, dynamic>?, // Changed to Map
+        doYouHavePulseOximeter: json['do_you_have_pulse_oximeter'] as Map<String, dynamic>?, // Changed to Map
+        emergencyContactName: json['emergency_contact_name'] as Map<String, dynamic>?, // Changed to Map
+        fluVaccinated: json['flu_vaccinated'] as Map<String, dynamic>?, // Changed to Map
+        homeOxygenEnabled: json['home_oxygen_enabled'] as Map<String, dynamic>?, // Changed to Map
+        hospitalAdmissionsLast12m: json['hospital_admissions_last_12m'] as int?,
+        inhalerType: json['inhaler_type'] as Map<String, dynamic>?, // Changed to Map
+        isDoHaveDigitalStethoscope: json['is_do_have_digital_stethoscope'] as String?,
+        isFlareUpsNonHospital: json['is_flare_ups_non_hospital'] as bool?,
+        otherCondition: json['other_condition'] as Map<String, dynamic>?, // Changed to Map
+        pageNumber: json['page_number'] as int?,
+        rescuepackAtHome: json['rescuepack_at_home'] as Map<String, dynamic>?, // Changed to Map
+        smokingStatus: json['smoking_status'] as Map<String, dynamic>?, // Changed to Map
+        createdAt: json['created_at'] as String?,
+        updatedAt: json['updated_at'] as String?,
+      );
+    } catch (e) {
+      print('❌ Error parsing PatientUser from JSON: $e');
+      print('❌ JSON data: $json');
+      return PatientUser(
+        id: json['user_id'] ?? json['id'] ?? 'unknown',
+        name: json['name'] ?? 'Unknown Patient',
+        email: json['email'] as String?,
+        phone: json['phone'] as String?,
+        address: json['address'] as String?,
+        dateOfBirth: json['dateofbirth'] ?? json['date_of_birth'] ?? json['dateOfBirth'],
+        gender: json['gender'] as String?,
+        medicalHistory: json['medical_history'] ?? json['medicalHistory'],
+        vitalSigns: json['vital_signs'] ?? json['vitalSigns'],
+        lastVisit: json['last_visit'] ?? json['lastVisit'],
+        nextAppointment: json['next_appointment'] ?? json['nextAppointment'],
+        status: json['status'] as String?,
+        isUserActive: json['is_user_active'] as bool?,
+        anyRecommends: json['any_recommends'] as String?,
+        copdActionPlan: json['copd_action_plan'] as Map<String, dynamic>?, // Changed to Map
+        copdDiagnosed: json['copd_diagnosed'] as Map<String, dynamic>?, // Changed to Map
+        doYouHavePulseOximeter: json['do_you_have_pulse_oximeter'] as Map<String, dynamic>?, // Changed to Map
+        emergencyContactName: json['emergency_contact_name'] as Map<String, dynamic>?, // Changed to Map
+        fluVaccinated: json['flu_vaccinated'] as Map<String, dynamic>?, // Changed to Map
+        homeOxygenEnabled: json['home_oxygen_enabled'] as Map<String, dynamic>?, // Changed to Map
+        hospitalAdmissionsLast12m: json['hospital_admissions_last_12m'] as int?,
+        inhalerType: json['inhaler_type'] as Map<String, dynamic>?, // Changed to Map
+        isDoHaveDigitalStethoscope: json['is_do_have_digital_stethoscope'] as String?,
+        isFlareUpsNonHospital: json['is_flare_ups_non_hospital'] as bool?,
+        otherCondition: json['other_condition'] as Map<String, dynamic>?, // Changed to Map
+        rescuepackAtHome: json['rescuepack_at_home'] as Map<String, dynamic>?, // Changed to Map
+        smokingStatus: json['smoking_status'] as Map<String, dynamic>?, // Changed to Map
+        createdAt: json['created_at'] as String?,
+        updatedAt: json['updated_at'] as String?,
       );
     }
   }

@@ -7,6 +7,7 @@ class Urls{
 
   static const String login = 'login';
   static const String search = 'users/search';
+  static const String getPatientCheckUp = 'admin/get-user-details';
 
 
 }
