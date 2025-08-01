@@ -101,7 +101,6 @@ class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckup
                 Text("UsedOxygenAsPrescribed ${data.data?.usedOxygenAsPrescribed == true ? "Available" : "Not Available"}"),
                 if(data.data?.lungSoundFiles != null) ...[
                 Text("Audios "),
-
                 Row(
                     children:
                     data.data!.lungSoundFiles!.map((audio) =>
