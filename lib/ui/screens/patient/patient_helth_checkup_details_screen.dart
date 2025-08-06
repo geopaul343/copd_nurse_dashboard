@@ -2,8 +2,10 @@ import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import '../../../app/helper/date_helper.dart';
 import '../../../data/model/patient_checkup_data_model.dart';
 import '../../bloc/dashboard_bloc.dart';
+import '../../widgets/custom_audio_player.dart';
 
 class PatientHealthCheckupDetailsScreen extends StatefulWidget {
   static const String path = '/patient-health-checkup';
@@ -40,17 +42,14 @@ class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckup
   Widget _tabBarView(){
     return TabBar(
       controller: _tabController,
+      dividerColor: ColorName.primary,
+      indicatorColor: ColorName.primary,
       tabs: [
         Tab(icon: Icon(Icons.today), text: 'Daily'),
         Tab(icon: Icon(Icons.weekend), text: 'Weekly'),
         Tab(icon: Icon(Icons.calendar_month), text: 'Monthly'),
       ],
-      indicator: BoxDecoration(
-        color: Colors.blue.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      labelPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      labelColor: ColorName.primary,
     );
   }
 
@@ -68,7 +67,9 @@ class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckup
         margin: EdgeInsets.only(bottom: 10),
         child: Row(
           children: [
-            Text("Grade ${data.grade}")
+            Text("Grade: ${data.grade}"),
+            Spacer(),
+            data.createdAt != null? Text("Date: ${DateConverter.isoStringToLocalDateOnly(data.createdAt!)}") : SizedBox(),
           ],
         ),
       )).toList(),),
@@ -82,7 +83,7 @@ class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckup
             width: double.infinity,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: ColorName.primary.withValues(alpha: 0.70)
+                color: ColorName.primary.withValues(alpha: 0.50)
             ),
             padding: EdgeInsets.symmetric(vertical: 20,horizontal: 20),
             margin: EdgeInsets.only(bottom: 10),
@@ -91,14 +92,15 @@ class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckup
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("Breathing: ${data.data?.breathing}"),
-                Text("DidShortWalk ${data.data?.didShortWalk == true ? "Available" : "Not Available"}"),
-                Text("HasInhalerStock ${data.data?.hasInhalerStock== true ? "Available" : "Not Available"}"),
-                Text("PhlegmChange ${data.data?.phlegmChange}"),
-                Text("PhlegmColor ${data.data?.phlegmColor}"),
-                Text("RelieverPuffs ${data.data?.relieverPuffs}"),
-                Text("spo2 ${data.data?.spo2}"),
-                Text("TookRegularInhaler ${data.data?.tookRegularInhaler == true ? "Available" : "Not Available"}"),
-                Text("UsedOxygenAsPrescribed ${data.data?.usedOxygenAsPrescribed == true ? "Available" : "Not Available"}"),
+                Text("DidShortWalk: ${data.data?.didShortWalk == true ? "Available" : "Not Available"}"),
+                Text("HasInhalerStock: ${data.data?.hasInhalerStock== true ? "Available" : "Not Available"}"),
+                Text("PhlegmChange: ${data.data?.phlegmChange??"N/A"}"),
+                Text("PhlegmColor: ${data.data?.phlegmColor??"N/A"}"),
+                Text("RelieverPuffs: ${data.data?.relieverPuffs??"N/A"}"),
+                Text("spo2: ${data.data?.spo2??"N/A"}"),
+                Text("TookRegularInhaler: ${data.data?.tookRegularInhaler == true ? "Available" : "Not Available"}"),
+                Text("UsedOxygenAsPrescribed: ${data.data?.usedOxygenAsPrescribed == true ? "Available" : "Not Available"}"),
+                data.createdAt != null? Text("Date: ${DateConverter.isoStringToLocalDateOnly(data.createdAt!)}") : SizedBox(),
                 if(data.data?.lungSoundFiles != null) ...[
                 Text("Audios "),
                 Row(
@@ -106,10 +108,7 @@ class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckup
                     data.data!.lungSoundFiles!.map((audio) =>
                     Padding(
                       padding: const EdgeInsets.only(right: 5),
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: ColorName.white,
-                      ),
+                      child: AudioWidget(url: audio),
                     )).toList()
                 )
                 ]

@@ -81,7 +81,7 @@ class UserDailyDatum {
 }
 
 class UserDailyDatumData {
-  int? breathing;
+  dynamic? breathing;
   bool? didShortWalk;
   bool? hasInhalerStock;
   List<String>? lungSoundFiles;

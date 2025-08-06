@@ -285,17 +285,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            Gap(50),
-            profileView(),
-            Gap(20),
-            searchView(),
-            Gap(20),
-            instructionsView(),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              Gap(50),
+              profileView(),
+              Gap(20),
+              searchView(),
+              Gap(20),
+              instructionsView(),
+            ],
+          ),
         ),
       ),
     );
