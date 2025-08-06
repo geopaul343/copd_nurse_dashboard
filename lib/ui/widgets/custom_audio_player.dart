@@ -89,6 +89,7 @@ class AudioWidgetState extends State<AudioWidget> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     // Calculate progress (0.0 to 1.0)
