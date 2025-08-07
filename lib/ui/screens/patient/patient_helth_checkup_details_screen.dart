@@ -54,8 +54,8 @@ class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckup
   }
 
 
-  Widget _monthlyAndWeeklyView(List<UserLyDatum>? userMonthlyData){
-    return userMonthlyData == null ? Center(child: Text("No Details Found!"),):SingleChildScrollView(
+  Widget _monthlyAndWeeklyView(List<UserLyDatum>? userMonthlyData,MonthlyAndWeeklyType type){
+    return userMonthlyData == null || userMonthlyData.isEmpty? Center(child: Text("No Details Found!"),):SingleChildScrollView(
       child: Column(children: userMonthlyData.map((data) =>
       Container(
         width: double.infinity,
@@ -77,7 +77,7 @@ class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckup
   }
 
   Widget _dailyView(List<UserDailyDatum>? userData){
-    return userData == null ? Center(child: Text("No Details Found!"),):SingleChildScrollView(
+    return userData == null || userData.isEmpty? Center(child: Text("No Details Found!"),):SingleChildScrollView(
       child: Column(children: userData.map((data) =>
           Container(
             width: double.infinity,
@@ -91,7 +91,7 @@ class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckup
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Breathing: ${data.data?.breathing}"),
+                Text("Breathing: ${data.data?.breathing??"N/A"}"),
                 Text("DidShortWalk: ${data.data?.didShortWalk == true ? "Available" : "Not Available"}"),
                 Text("HasInhalerStock: ${data.data?.hasInhalerStock== true ? "Available" : "Not Available"}"),
                 Text("PhlegmChange: ${data.data?.phlegmChange??"N/A"}"),
@@ -101,14 +101,14 @@ class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckup
                 Text("TookRegularInhaler: ${data.data?.tookRegularInhaler == true ? "Available" : "Not Available"}"),
                 Text("UsedOxygenAsPrescribed: ${data.data?.usedOxygenAsPrescribed == true ? "Available" : "Not Available"}"),
                 data.createdAt != null? Text("Date: ${DateConverter.isoStringToLocalDateOnly(data.createdAt!)}") : SizedBox(),
-                if(data.data?.lungSoundFiles != null) ...[
+                if(data.data?.lungSoundRecordings != null || data.data?.lungSoundRecordings?.isNotEmpty == true) ...[
                 Text("Audios "),
                 Row(
                     children:
-                    data.data!.lungSoundFiles!.map((audio) =>
+                    data.data!.lungSoundRecordings!.map((audio) =>
                     Padding(
                       padding: const EdgeInsets.only(right: 5),
-                      child: AudioWidget(url: audio),
+                      child: AudioWidget(url: audio.fileUri??""),
                     )).toList()
                 )
                 ]
@@ -126,9 +126,9 @@ class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckup
       // Content for Daily Tab
       _dailyView(data?.data?.userDailyData),
       // Content for Weekly Tab
-      _monthlyAndWeeklyView(data?.data?.userWeeklyData),
+      _monthlyAndWeeklyView(data?.data?.userWeeklyData,MonthlyAndWeeklyType.week),
       // Content for Monthly Tab
-      _monthlyAndWeeklyView(data?.data?.userMonthlyData),
+      _monthlyAndWeeklyView(data?.data?.userMonthlyData,MonthlyAndWeeklyType.month),
     ],
     );
   }
@@ -164,3 +164,6 @@ class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckup
     );
   }
 }
+
+
+enum MonthlyAndWeeklyType{week,month}

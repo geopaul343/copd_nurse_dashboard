@@ -84,7 +84,7 @@ class UserDailyDatumData {
   dynamic? breathing;
   bool? didShortWalk;
   bool? hasInhalerStock;
-  List<String>? lungSoundFiles;
+  List<LungSoundRecording>? lungSoundRecordings;
   String? phlegmChange;
   String? phlegmColor;
   String? regularInhalerReason;
@@ -97,7 +97,7 @@ class UserDailyDatumData {
     this.breathing,
     this.didShortWalk,
     this.hasInhalerStock,
-    this.lungSoundFiles,
+    this.lungSoundRecordings,
     this.phlegmChange,
     this.phlegmColor,
     this.regularInhalerReason,
@@ -111,7 +111,7 @@ class UserDailyDatumData {
     breathing: json["breathing"],
     didShortWalk: json["did_short_walk"],
     hasInhalerStock: json["has_inhaler_stock"],
-    lungSoundFiles: json["lung_sound_files"] == null ? [] : List<String>.from(json["lung_sound_files"]!.map((x) => x)),
+    lungSoundRecordings: json["lung_sound_recordings"] == null ? [] : List<LungSoundRecording>.from(json["lung_sound_recordings"]!.map((x) => LungSoundRecording.fromJson(x))),
     phlegmChange: json["phlegm_change"],
     phlegmColor: json["phlegm_color"],
     regularInhalerReason: json["regular_inhaler_reason"],
@@ -125,7 +125,7 @@ class UserDailyDatumData {
     "breathing": breathing,
     "did_short_walk": didShortWalk,
     "has_inhaler_stock": hasInhalerStock,
-    "lung_sound_files": lungSoundFiles == null ? [] : List<dynamic>.from(lungSoundFiles!.map((x) => x)),
+    "lung_sound_recordings": lungSoundRecordings == null ? [] : List<dynamic>.from(lungSoundRecordings!.map((x) => x.toJson())),
     "phlegm_change": phlegmChange,
     "phlegm_color": phlegmColor,
     "regular_inhaler_reason": regularInhalerReason,
@@ -136,6 +136,33 @@ class UserDailyDatumData {
   };
 }
 
+class LungSoundRecording {
+  String? fileUri;
+  int? index;
+  String? lungPoint;
+  int? timestamp;
+
+  LungSoundRecording({
+    this.fileUri,
+    this.index,
+    this.lungPoint,
+    this.timestamp,
+  });
+
+  factory LungSoundRecording.fromJson(Map<String, dynamic> json) => LungSoundRecording(
+    fileUri: json["file_uri"],
+    index: json["index"],
+    lungPoint: json["lung_point"],
+    timestamp: json["timestamp"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "file_uri": fileUri,
+    "index": index,
+    "lung_point": lungPoint,
+    "timestamp": timestamp,
+  };
+}
 
 class UserLyDatum {
   DateTime? createdAt;

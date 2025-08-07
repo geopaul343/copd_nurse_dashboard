@@ -95,42 +95,45 @@ class AudioWidgetState extends State<AudioWidget> {
     // Calculate progress (0.0 to 1.0)
     final progress = _duration.inSeconds > 0 ? _position.inSeconds / _duration.inSeconds : 0.0;
 
-    return GestureDetector(
-      onTap: _togglePlayPause,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          // Circular progress bar for playback
-          SizedBox(
-            width: 40,
-            height: 40,
-            child: CircularProgressIndicator(
-              value: progress, // Indeterminate when loading
-              backgroundColor: Colors.grey[300],
-              valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
-              strokeWidth: 4,
-            ),
-          ),
-          // CircleAvatar with play/pause icon or loader
-          CircleAvatar(
-            radius: 20,
-            backgroundColor: Colors.white,
-            child: _isLoading
-                ? const SizedBox(
-              width: 24,
-              height: 24,
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: GestureDetector(
+        onTap: _togglePlayPause,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            // Circular progress bar for playback
+            SizedBox(
+              width: 40,
+              height: 40,
               child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                value: progress, // Indeterminate when loading
+                backgroundColor: Colors.grey[300],
+                valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
+                strokeWidth: 4,
               ),
-            )
-                : Icon(
-              _isPlaying ? Icons.pause : Icons.play_arrow,
-              color: Colors.black,
-              size: 24,
             ),
-          ),
-        ],
+            // CircleAvatar with play/pause icon or loader
+            CircleAvatar(
+              radius: 20,
+              backgroundColor: Colors.white,
+              child: _isLoading
+                  ? const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                ),
+              )
+                  : Icon(
+                _isPlaying ? Icons.pause : Icons.play_arrow,
+                color: Colors.black,
+                size: 24,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
