@@ -1,62 +1,73 @@
-import 'package:admin_dashboard/data/nurse/model/admin/nurse_model.dart';
 import 'package:flutter/material.dart';
+import 'package:admin_dashboard/gen/colors.gen.dart';
+import 'package:admin_dashboard/ui/nurse/widgets/custom_text.dart';
+import 'pateint_list_toadd_nurse.dart'; // import
 
-class NurseDetailesScreen extends StatelessWidget {
-
-
-  
-String get title => 'Nurse Details';
+class NurseDetailesScreen extends StatefulWidget {
   static const String path = '/nurse-details';
-  final NurseModel? nurseModel; 
+  final String? nurseName;
+  final String? nurseId;
 
-  NurseDetailesScreen({super.key, this.nurseModel});
+  const NurseDetailesScreen({super.key, this.nurseName, this.nurseId});
+
+  @override
+  State<NurseDetailesScreen> createState() => _NurseDetailesScreenState();
+}
+
+class _NurseDetailesScreenState extends State<NurseDetailesScreen> {
+  List<Map<String, String>> assignedPatients = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          nurseModel != null ? nurseModel!.name : 'Nurse Details',
-          style: TextStyle(color: Colors.white),
-        ),
-       backgroundColor: Colors.blue.shade700,
-   
-   actions: [
+        title: Text(widget.nurseName ?? 'Nurse Details'),
+        backgroundColor: Colors.blue.shade700,
+        actions: [
           IconButton(
-            icon: Icon(Icons.add ,color: Colors.white,),
-            onPressed: () {
-              // Navigate to edit screen or perform edit action
+            icon: Icon(Icons.add, color: Colors.white),
+            onPressed: () async {
+              final selectedPatients = await Navigator.pushNamed(
+                context,
+                PatientListToAddNurse.path,
+              ) as List<Map<String, String>>?;
+
+              if (selectedPatients != null) {
+                setState(() {
+                  assignedPatients.addAll(selectedPatients);
+                });
+              }
             },
           ),
         ],
       ),
-
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          
-          Container(
-            child: Column(
-              children: [
-                Text(
-                  'Nurse ID: ${nurseModel?.nurseId ?? 'N/A'}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                  Container(
-            child: Text(
-              'Nurse Name: ${nurseModel?.name ?? 'N/A'}',
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            CustomText(
+              text: "Assigned Patients",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-          ), Container(
-            child: Text(
-              'General nurse details.',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ListView.builder(
+              itemCount: assignedPatients.length,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                final p = assignedPatients[index];
+                return Card(
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: ColorName.primary,
+                      child: Icon(Icons.person, color: Colors.white),
+                    ),
+                    title: Text(p['name']!),
+                    subtitle: Text('Patient ID: ${p['id']}'),
+                  ),
+                );
+              },
             ),
-          ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

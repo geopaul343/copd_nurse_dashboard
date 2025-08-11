@@ -17,13 +17,10 @@ class AdminHomescreen extends StatefulWidget {
 }
 
 class _AdminHomescreenState extends State<AdminHomescreen> {
-
   final AdminBloc _bloc = AdminBloc();
 
-
-
   String nurseName = "Janet Jose";
- // Example nurse name
+  // Example nurse name
 
   @override
   void initState() {
@@ -31,26 +28,22 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
     callNurseApi();
   }
 
-  callNurseApi()async{
+  callNurseApi() async {
     await _bloc.getAllNurses();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Nurse Profiles',
-          style: TextStyle(color: Colors.white),
-        ),
+        title: Text('Nurse Profiles', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.blue.shade700,
         actions: [
           IconButton(
             icon: Icon(Icons.logout, color: Colors.white),
-            onPressed: ()async{
-
+            onPressed: () async {
               showExitDialog(context);
               // Clear user details and navigate to login screen
-
             },
           ),
         ],
@@ -84,19 +77,20 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
 }
 
 Widget nurseProfileListview(
-    int nurseId, String nurseName, BuildContext context) {
+  int nurseId,
+  String nurseName,
+  BuildContext context,
+) {
   return GestureDetector(
     onTap: () {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => NurseDetailesScreen(
-            nurseModel: NurseModel(
-              name: nurseName,
-              nurseId: nurseId.toString(),
-              specialization: 'General Nursing',
-            ),
-          ),
+          builder:
+              (context) => NurseDetailesScreen(
+                nurseName: nurseName,
+                nurseId: nurseId.toString(),
+              ),
         ),
       );
     },

@@ -1,6 +1,7 @@
 import 'package:admin_dashboard/ui/admin/screens/admin_homescreen.dart';
 import 'package:admin_dashboard/ui/admin/screens/admin_login_screen.dart';
 import 'package:admin_dashboard/ui/admin/screens/nurse_detailes_screen.dart';
+import 'package:admin_dashboard/ui/admin/screens/pateint_list_toadd_nurse.dart';
 import 'package:admin_dashboard/ui/admin_or_nurse_screen.dart';
 import 'package:admin_dashboard/ui/nurse/screens/auth/login_screen.dart';
 import 'package:admin_dashboard/ui/nurse/screens/dashboard/dashboard_screen.dart';
@@ -31,8 +32,10 @@ class Routes {
      
        case NurseDetailesScreen.path:
         return pageRoute(settings, NurseDetailesScreen());
+      case PatientListToAddNurse.path:
+        return pageRoute(settings, PatientListToAddNurse());
    
-     
+ 
       case DashboardScreen.path:
         return pageRoute(settings, const DashboardScreen());
       case PatientsListScreen.path:

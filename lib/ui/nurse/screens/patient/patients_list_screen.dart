@@ -4,7 +4,6 @@ import 'package:admin_dashboard/ui/nurse/screens/patient/patient_detail_screen.d
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
 
 import '../../../../data/nurse/model/nurse/search_user_model.dart';
 
