@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import '../../../app/helper/shared_preference_helper.dart';
+import '../../admin_or_nurse_screen.dart';
   void showExitDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => customExitDialog(context),
-    ).then((exit) {
-      if (exit ?? false) {
-        // User pressed Exit - close the app
-        Navigator.of(context).pop(); // Close dialog
-        SystemNavigator.pop(); // Close the app (works on Android/iOS)
-        // Alternatively for both platforms:
-        // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-      }
-    });
+    );
   }
 
 
@@ -26,7 +21,10 @@ Widget customExitDialog(BuildContext context) {
         child: const Text('Cancel'),
       ),
       TextButton(
-        onPressed: () => Navigator.of(context).pop(true),
+        onPressed: () async{
+          await SharedPrefService.instance.clearPrefs();
+          Navigator.pushReplacementNamed(context, AdminOrNurseScreen.path);
+        },
         child: const Text('Exit'),
       ),
     ],

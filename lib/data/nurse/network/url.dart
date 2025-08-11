@@ -10,6 +10,13 @@ class Urls{
   static const String login = 'login';
   static const String search = 'users/search';
   static const String getPatientCheckUp = 'admin/get-user-details';
+  static const String getPatientCheckUpById = 'admin/get-all-user-details';
+
+  //Admin
+  static const String apiLogin = '/admin/login';
+  static const String getAllPatients = 'admin/get-user-users';
+  static const String getAllNurses = '/api/admin/get-all-nurses';
+  static const String apiAssignPatientToNurse = '/api/admin/set-patient';
 
 
 }

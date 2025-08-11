@@ -1,4 +1,4 @@
-import 'package:admin_dashboard/data/admin/model/nurse_model.dart';
+import 'package:admin_dashboard/data/nurse/model/admin/nurse_model.dart';
 import 'package:flutter/material.dart';
 
 class NurseDetailesScreen extends StatelessWidget {

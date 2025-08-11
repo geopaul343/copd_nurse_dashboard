@@ -4,20 +4,24 @@ import 'dart:convert';
 
 import 'package:admin_dashboard/app/app_constants.dart';
 import 'package:admin_dashboard/app/helper/shared_preference_helper.dart';
-import 'package:admin_dashboard/data/nurse/model/user_detail_model.dart';
 import 'package:admin_dashboard/ui/admin/screens/admin_homescreen.dart';
 
 import 'package:admin_dashboard/ui/nurse/screens/dashboard/dashboard_screen.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
+
+import '../../../data/nurse/model/nurse/user_detail_model.dart';
+import '../../../data/nurse/repository/auth/auth_repo_impl.dart';
+import '../../admin/widgets/custom_snackbar.dart';
 
 class AuthBloc{
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthRepoImpl repo = AuthRepoImpl();
 
   UserDetails? userDetails;
 
@@ -33,44 +37,21 @@ class AuthBloc{
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
       if (googleUser == null) {
-        print('❌ User cancelled Google Sign-In');
-
         return;
       }
 
-      print('✅ Google Sign-In successful');
-      print('✅ User email: ${googleUser.email}');
-      print('✅ User display name: ${googleUser.displayName}');
-
-      print('🔍 Getting Google Auth credentials...');
       final GoogleSignInAuthentication googleAuth =
       await googleUser.authentication;
 
-      print('✅ Google Auth successful');
-      print(
-        '✅ Access token: ${googleAuth.accessToken != null ? "Present" : "Missing"}',
-      );
-      print(
-        '✅ ID token: ${googleAuth.idToken != null ? "Present" : "Missing"}',
-      );
-
-      print('🔍 Creating Firebase credential...');
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      print('🔍 Signing in to Firebase...');
       final UserCredential userCredential = await _auth.signInWithCredential(
         credential,
       );
 
-      print('✅ Firebase sign-in successful');
-      print('✅ Firebase user ID: ${userCredential.user?.uid}');
-      print('✅ Firebase user email: ${userCredential.user?.email}');
-
-      // Call backend API
-      print('🔍 Calling backend API...');
       try {
         final idToken = await userCredential.user!.getIdToken();
         UserDetails userDetail = UserDetails(
@@ -84,17 +65,11 @@ class AuthBloc{
         SharedPrefService.instance.setString(AppConstants.accessToken, idToken??"");
         SharedPrefService.instance.setString(AppConstants.userId, userCredential.user?.uid??"");
         userDetails = await getUserDetails();
-        if (isFromAdmin) {
-          Navigator.pushReplacementNamed(context, AdminHomescreen.path);
-        } else {
-          Navigator.pushReplacementNamed(context, DashboardScreen.path);
-        }
+        await callLogInApi(email: userCredential.user?.email??"", userId: userCredential.user?.uid??"", userName: userCredential.user?.displayName??"",isFromAdmin:isFromAdmin );
       } catch (apiError) {
         print('⚠️ Backend API call failed: $apiError');
         // Continue anyway - user is authenticated with Firebase
       }
-
-      print('=== GOOGLE SIGN-IN DEBUG END ===');
     } catch (e) {
       print('=== GOOGLE SIGN-IN ERROR DEBUG ===');
       print('❌ Sign-in error type: ${e.runtimeType}');
@@ -103,6 +78,19 @@ class AuthBloc{
     }
   }
 
+  Future callLogInApi({required String email, required String userId, required String userName,required bool isFromAdmin})async{
+   Response result = await repo.login(email: email, userId: userId, userName: userName);
+   if(result.statusCode == 201 || result.statusCode == 200){
+     if (isFromAdmin) {
+       Navigator.pushReplacementNamed(AppConstants.globalNavigatorKey.currentContext!, AdminHomescreen.path);
+     } else {
+       Navigator.pushReplacementNamed(AppConstants.globalNavigatorKey.currentContext!, DashboardScreen.path);
+     }
+   }else{
+     SnackBarCustom.failure("Login Failed try Again");
+   }
+
+  }
 
   // Function to retrieve UserDetails from SharedPreferences
   Future<UserDetails?> getUserDetails() async {

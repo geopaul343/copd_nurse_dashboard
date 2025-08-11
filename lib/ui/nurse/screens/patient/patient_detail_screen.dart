@@ -1,6 +1,5 @@
 import 'package:admin_dashboard/app/app_constants.dart';
 import 'package:admin_dashboard/app/helper/shared_preference_helper.dart';
-import 'package:admin_dashboard/data/nurse/model/search_user_model.dart';
 
 import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:admin_dashboard/app/string_constants.dart';
@@ -17,6 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gap/gap.dart';import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../data/nurse/model/nurse/search_user_model.dart';
 
 
 class PatientDetailScreen extends StatefulWidget {

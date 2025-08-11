@@ -1,8 +1,8 @@
 import 'package:admin_dashboard/app/app_constants.dart';
 import 'package:admin_dashboard/app/helper/date_helper.dart';
 import 'package:admin_dashboard/app/helper/shared_preference_helper.dart';
-import 'package:admin_dashboard/data/admin/model/nurse_model.dart';
-import 'package:admin_dashboard/data/nurse/model/patient_checkup_data_model.dart';
+import 'package:admin_dashboard/data/nurse/model/admin/nurse_model.dart';
+import 'package:admin_dashboard/data/nurse/model/nurse/patient_checkup_data_model.dart';
 
 import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:admin_dashboard/app/string_constants.dart';

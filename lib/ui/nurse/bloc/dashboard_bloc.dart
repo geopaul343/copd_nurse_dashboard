@@ -1,12 +1,13 @@
 import 'dart:async';
 
-import 'package:admin_dashboard/data/admin/model/nurse_model.dart';
-import 'package:admin_dashboard/data/nurse/model/patient_checkup_data_model.dart';
+import 'package:admin_dashboard/data/nurse/model/admin/nurse_model.dart';
+import 'package:admin_dashboard/data/nurse/model/nurse/patient_checkup_data_model.dart';
 import 'package:admin_dashboard/data/nurse/repository/dashboard/dashboard_repo_impl.dart';
-import 'package:admin_dashboard/data/nurse/model/search_user_model.dart';
 
 import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
+
+import '../../../data/nurse/model/nurse/search_user_model.dart';
 
 
 class DashboardBloc{

@@ -5,6 +5,9 @@ import 'package:admin_dashboard/ui/nurse/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import '../app/app_constants.dart';
+import '../app/helper/shared_preference_helper.dart';
+
 class AdminOrNurseScreen extends StatelessWidget {
   static const String path = '/admin-or-nurse';
   const AdminOrNurseScreen({super.key});
@@ -33,7 +36,8 @@ class AdminOrNurseScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton.icon(
-                  onPressed: () {
+                  onPressed: () async{
+                    await SharedPrefService.instance.setInt(AppConstants.userType, 1);
                     Navigator.pushNamed(context, AdminLoginScreen.path);
                   },
                   icon: Icon(Icons.admin_panel_settings, size: 17),
@@ -54,7 +58,8 @@ class AdminOrNurseScreen extends StatelessWidget {
                 ),
                 Gap(20),
                 ElevatedButton.icon(
-                  onPressed: () {
+                  onPressed: () async{
+                    await SharedPrefService.instance.setInt(AppConstants.userType, 2);
                     Navigator.pushNamed(context, LoginScreen.path);
                   },
                   icon: Icon(Icons.local_hospital, size: 17),

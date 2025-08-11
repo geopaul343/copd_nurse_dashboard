@@ -6,10 +6,10 @@ import 'package:admin_dashboard/app/helper/helper.dart';
 import 'package:admin_dashboard/app/helper/shared_preference_helper.dart';
 import 'package:admin_dashboard/data/nurse/network/exceptions.dart';
 import 'package:admin_dashboard/data/nurse/repository/dashboard/dashboard_repo.dart';
-import 'package:admin_dashboard/data/nurse/model/search_user_model.dart';
 import 'package:admin_dashboard/di/di.dart';
 
-import '../../model/patient_checkup_data_model.dart';
+import '../../model/nurse/patient_checkup_data_model.dart';
+import '../../model/nurse/search_user_model.dart';
 import '../../network/dio_client.dart';
 import '../../network/url.dart';
 

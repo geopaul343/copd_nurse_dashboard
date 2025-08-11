@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
+import '../../../admin/screens/admin_homescreen.dart';
+
 
 class SplashScreen extends StatefulWidget {
 
@@ -27,7 +29,11 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(Duration(seconds: 3),(){
       if(SharedPrefService.instance.getString(AppConstants.userId) != null){
-        Navigator.pushReplacementNamed(context, AdminOrNurseScreen.path);
+        if(SharedPrefService.instance.getInt(AppConstants.userType) == 2){
+          Navigator.pushReplacementNamed(context, DashboardScreen.path);
+        }else{
+          Navigator.pushReplacementNamed(context, AdminHomescreen.path);
+        }
       }else{
         Navigator.pushReplacementNamed(context, AdminOrNurseScreen.path);
       }

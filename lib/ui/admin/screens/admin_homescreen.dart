@@ -1,9 +1,11 @@
-import 'package:admin_dashboard/data/admin/model/nurse_model.dart';
+import 'package:admin_dashboard/data/nurse/model/admin/nurse_model.dart';
 import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:admin_dashboard/ui/admin/screens/nurse_detailes_screen.dart';
 import 'package:admin_dashboard/ui/nurse/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+
+import '../../nurse/widgets/custom_exit.dart';
 
 class AdminHomescreen extends StatelessWidget {
   static const String path = '/admin-homescreen';
@@ -20,6 +22,17 @@ class AdminHomescreen extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.blue.shade700,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout, color: Colors.white),
+            onPressed: ()async{
+
+              showExitDialog(context);
+              // Clear user details and navigate to login screen
+
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: SafeArea(

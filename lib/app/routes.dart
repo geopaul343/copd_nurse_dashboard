@@ -1,4 +1,3 @@
-import 'package:admin_dashboard/data/nurse/model/search_user_model.dart';
 import 'package:admin_dashboard/ui/admin/screens/admin_homescreen.dart';
 import 'package:admin_dashboard/ui/admin/screens/admin_login_screen.dart';
 import 'package:admin_dashboard/ui/admin/screens/nurse_detailes_screen.dart';
@@ -12,6 +11,8 @@ import 'package:admin_dashboard/ui/nurse/screens/splash/splash.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+
+import '../data/nurse/model/nurse/search_user_model.dart';
 
 class Routes {
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {

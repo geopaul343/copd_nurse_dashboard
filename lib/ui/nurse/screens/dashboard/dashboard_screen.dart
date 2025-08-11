@@ -1,5 +1,4 @@
 
-import 'package:admin_dashboard/data/nurse/model/user_detail_model.dart';
 import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:admin_dashboard/app/string_constants.dart';
 import 'package:admin_dashboard/ui/nurse/bloc/auth_bloc.dart';
@@ -9,6 +8,8 @@ import 'package:admin_dashboard/ui/nurse/widgets/custom_text.dart';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+
+import '../../../../data/nurse/model/nurse/user_detail_model.dart';
 
 class DashboardScreen extends StatefulWidget {
   static const String path = '/dashboard';
@@ -279,7 +280,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             icon: Icon(Icons.logout, color: Colors.white),
             onPressed: ()async{
 
-showExitDialog(context);
+          showExitDialog(context);
               // Clear user details and navigate to login screen
          
 
