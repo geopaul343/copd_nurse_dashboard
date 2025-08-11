@@ -15,8 +15,8 @@ class Urls{
   //Admin
   static const String apiLogin = '/admin/login';
   static const String getAllPatients = 'admin/get-user-users';
-  static const String getAllNurses = '/api/admin/get-all-nurses';
-  static const String apiAssignPatientToNurse = '/api/admin/set-patient';
+  static const String getAllNurses = 'admin/get-all-nurses';
+  static const String apiAssignPatientToNurse = '/admin/set-patient';
 
 
 }

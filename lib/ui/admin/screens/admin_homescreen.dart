@@ -6,13 +6,34 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import '../../nurse/widgets/custom_exit.dart';
+import '../bloc/admin_bloc.dart';
 
-class AdminHomescreen extends StatelessWidget {
+class AdminHomescreen extends StatefulWidget {
   static const String path = '/admin-homescreen';
   AdminHomescreen({super.key});
 
-  String nurseName = "Janet Jose"; // Example nurse name
+  @override
+  State<AdminHomescreen> createState() => _AdminHomescreenState();
+}
 
+class _AdminHomescreenState extends State<AdminHomescreen> {
+
+  final AdminBloc _bloc = AdminBloc();
+
+
+
+  String nurseName = "Janet Jose";
+ // Example nurse name
+
+  @override
+  void initState() {
+    super.initState();
+    callNurseApi();
+  }
+
+  callNurseApi()async{
+    await _bloc.getAllNurses();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
