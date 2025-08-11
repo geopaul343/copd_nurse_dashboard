@@ -1,7 +1,7 @@
+import 'package:admin_dashboard/app/app_constants.dart';
+import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
-import '../../app/app_constants.dart';
-import '../../gen/colors.gen.dart';
 
 
 class SnackBarCustom {

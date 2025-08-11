@@ -1,15 +1,13 @@
-import 'dart:convert';
-import 'dart:developer';
+import 'package:admin_dashboard/app/app_constants.dart';
+import 'package:admin_dashboard/app/helper/shared_preference_helper.dart';
 
+import 'package:admin_dashboard/ui/nurse/screens/auth/login_screen.dart';
+import 'package:admin_dashboard/ui/nurse/widgets/custom_snackbar.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 
-import '../../app/app_constants.dart';
-import '../../app/helper/shared_preference_helper.dart';
-import '../../di/di.dart';
-import '../../ui/screens/auth/login_screen.dart';
-import '../../ui/widgets/custom_snackbar.dart';
-import 'dio_client.dart';
+import 'package:flutter/material.dart';
+
+import 'package:flutter/material.dart';
 
 class LoggingInterceptor extends Interceptor {
   @override

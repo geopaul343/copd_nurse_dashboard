@@ -1,5 +1,7 @@
 
-import '../../env/env.dart';
+import 'package:admin_dashboard/env/env.dart';
+
+
 
 class Urls{
   static var apiUrl = '${Env.instance.domainUrl}/api/';

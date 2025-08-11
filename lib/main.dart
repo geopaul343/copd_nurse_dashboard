@@ -7,17 +7,14 @@ import 'env/development_env.dart';
 import 'env/env.dart';
 import 'env/production_env.dart';
 
-void main() =>getEnvironment();
+void main() => getEnvironment();
 
 getEnvironment() {
   // 0 - Development, 1 - Production,
   // fetch environment value in const variable only.
   // set configuration --dart-define=ENVIRONMENT_TYPE=1
   // default production environment will be loaded.
-  const environment = int.fromEnvironment(
-    'ENVIRONMENT_TYPE',
-    defaultValue: 0,
-  );
+  const environment = int.fromEnvironment('ENVIRONMENT_TYPE', defaultValue: 0);
 
   switch (EnvironmentType.values[environment]) {
     case EnvironmentType.development:
@@ -28,6 +25,7 @@ getEnvironment() {
       return DevelopmentEnv();
   }
 }
+
 class MyApp extends StatelessWidget {
   final Env env;
   const MyApp({super.key, required this.env});
@@ -41,13 +39,9 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: Routes.onGenerateRoute,
       initialRoute: '/',
       theme: themeData,
-      supportedLocales: const [
-        Locale('en', 'IN'),
-      ],
+      supportedLocales: const [Locale('en', 'IN')],
       locale: const Locale('en', 'IN'),
       title: AppConstants.appTitle,
     );
   }
 }
-
-

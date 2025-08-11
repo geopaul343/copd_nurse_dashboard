@@ -1,6 +1,8 @@
+
+import 'package:admin_dashboard/data/nurse/network/dio_client.dart';
 import 'package:get_it/get_it.dart';
 
-import '../data/network/dio_client.dart';
+
 
 final getIt = GetIt.instance;
 

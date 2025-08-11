@@ -1,8 +1,9 @@
 import 'dart:convert';
 
+import 'package:admin_dashboard/data/nurse/model/user_detail_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../data/model/user_detail_model.dart';
+
 import '../app_constants.dart';
 
 class SharedPrefService {

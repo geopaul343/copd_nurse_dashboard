@@ -5,7 +5,11 @@ class StringConstants {
   static const String professionalPatient  = 'Professional Patient Management System ';
   static const String loginButton = 'Login';
   static const String clinicalNurseAccess = 'Clinical Nurse Access';
+    static const String clinicalAdminAccess = 'Admin Access';
   static const String loginContactViewText = 'Sign in with your Google account to access patient records and manage COPD care';
+  
+  static const String loginContactAdminViewText = 'Sign in with your Google account to access both nurse and patient details';
+  
   static const String loginBotomText = 'Secure • HIPAA Compliant • Professional';
   static const String signInWithGoogle = 'Sign in with Google';
   static const String welcomeMessage = 'Welcome to the Admin Dashboard';

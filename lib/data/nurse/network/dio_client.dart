@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:admin_dashboard/data/network/url.dart';
+
+import 'package:admin_dashboard/data/nurse/network/url.dart';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 

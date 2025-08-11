@@ -2,11 +2,14 @@ import 'package:admin_dashboard/app/string_constants.dart';
 import 'package:admin_dashboard/app/style_guide/dimensions.dart';
 import 'package:admin_dashboard/gen/assets.gen.dart';
 import 'package:admin_dashboard/gen/colors.gen.dart';
-import 'package:admin_dashboard/ui/bloc/auth_bloc.dart';
-import 'package:admin_dashboard/ui/widgets/custom_text.dart';
+import 'package:admin_dashboard/ui/nurse/bloc/auth_bloc.dart';
+import 'package:admin_dashboard/ui/nurse/widgets/custom_text.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gap/gap.dart';
+import 'package:admin_dashboard/gen/colors.gen.dart';
+import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String path = '/login';
@@ -45,13 +48,10 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-
-
-
-  Widget contactView(){
+  Widget contactView() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 15),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
       decoration: BoxDecoration(
         color: ColorName.white,
         borderRadius: BorderRadius.circular(12),
@@ -65,44 +65,47 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       child: Column(
         children: [
-        Container( 
-          child: Icon(
-            Icons.person,size: 36,
-            color: ColorName.textBlue1.withValues(alpha: 0.7),)),
-           
-           Gap(15),
-              CustomText(
-                text: StringConstants.clinicalNurseAccess,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: ColorName.textBlack,
-                ),
-              ),
-               Gap(10),
-              CustomText(
-                text: StringConstants.loginContactViewText,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.normal,
-                  color: ColorName.grey600,
-                ),
-              ),
-              Gap(15),
-              loginButton()
-        ]));
-         
+          Container(
+            child: Icon(
+              Icons.person,
+              size: 36,
+              color: ColorName.textBlue1.withValues(alpha: 0.7),
+            ),
+          ),
+
+          Gap(15),
+          CustomText(
+            text: StringConstants.clinicalNurseAccess,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: ColorName.textBlack,
+            ),
+          ),
+          Gap(10),
+          CustomText(
+            text: StringConstants.loginContactViewText,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.normal,
+              color: ColorName.grey600,
+            ),
+          ),
+          Gap(15),
+          loginButton(),
+        ],
+      ),
+    );
   }
 
-
-  Widget loginButton(){
-    return  GestureDetector(
+  Widget loginButton() {
+    return GestureDetector(
       onTap: () async {
-                    isLoading = true;
-                    setState(() {});
-                    await _bloc.signInWithGoogle(context);
-                    isLoading = false;
-                    setState(() {});
+        isLoading = true;
+        setState(() {});
+        await _bloc.signInWithGoogle(context, isFromAdmin: false);
+        isLoading = false;
+        setState(() {});
       },
       child: Container(
         width: double.infinity,
@@ -111,32 +114,29 @@ class _LoginScreenState extends State<LoginScreen> {
           color: Colors.blue.shade600,
           borderRadius: BorderRadius.circular(16),
         ),
-        child: isLoading ? Center(
-          child: SpinKitChasingDots(
-  color: Colors.white,
-     size: 30.0,
-   ),
-        ): Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-           Assets.svgs.icGoogleLogo.svg(
-              width: 24,
-              height: 24,
-            ),
-            Gap(10),
-            CustomText(
-              text: StringConstants.signInWithGoogle,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: ColorName.white,
-              ),
-            ),
-        ],),
+        child:
+            isLoading
+                ? Center(
+                  child: SpinKitChasingDots(color: Colors.white, size: 30.0),
+                )
+                : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Assets.svgs.icGoogleLogo.svg(width: 24, height: 24),
+                    Gap(10),
+                    CustomText(
+                      text: StringConstants.signInWithGoogle,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: ColorName.white,
+                      ),
+                    ),
+                  ],
+                ),
       ),
     );
-
   }
 
   @override
@@ -151,18 +151,18 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               topIconView(),
-          
+
               Gap(20),
               CustomText(
                 text: StringConstants.copdClinical,
-          
+
                 style: TextStyle(
                   fontSize: 34,
                   fontWeight: FontWeight.bold,
                   color: ColorName.textBlue1,
                 ),
               ),
-          
+
               Gap(20),
               CustomText(
                 text: StringConstants.dashboard,
@@ -182,9 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               Gap(20),
-          
-          
-          
+
               contactView(),
               Gap(20),
               CustomText(
@@ -202,5 +200,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-

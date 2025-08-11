@@ -1,7 +1,10 @@
-import 'package:admin_dashboard/data/model/search_user_model.dart';
-import 'package:admin_dashboard/ui/bloc/dashboard_bloc.dart';
-import 'package:admin_dashboard/ui/screens/patient/patient_detail_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:admin_dashboard/data/nurse/model/search_user_model.dart';
+import 'package:admin_dashboard/ui/nurse/bloc/dashboard_bloc.dart';
+import 'package:admin_dashboard/ui/nurse/screens/patient/patient_detail_screen.dart';
+
+import 'package:flutter/material.dart';
+
 import 'package:flutter/material.dart';
 
 class PatientsListScreen extends StatefulWidget {

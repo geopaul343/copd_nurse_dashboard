@@ -1,10 +1,15 @@
+import 'package:admin_dashboard/app/app_constants.dart';
+import 'package:admin_dashboard/app/helper/shared_preference_helper.dart';
 import 'package:admin_dashboard/gen/colors.gen.dart';
-import 'package:admin_dashboard/ui/screens/auth/login_screen.dart';
+import 'package:admin_dashboard/gen/colors.gen.dart';
+import 'package:admin_dashboard/ui/admin_or_nurse_screen.dart';
+import 'package:admin_dashboard/ui/nurse/screens/auth/login_screen.dart';
+import 'package:admin_dashboard/ui/nurse/screens/dashboard/dashboard_screen.dart';
+
+import 'package:flutter/material.dart';
+import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
-import '../../../app/app_constants.dart';
-import '../../../app/helper/shared_preference_helper.dart';
-import '../dashboard/dashboard_screen.dart';
 
 class SplashScreen extends StatefulWidget {
 
@@ -22,9 +27,9 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(Duration(seconds: 3),(){
       if(SharedPrefService.instance.getString(AppConstants.userId) != null){
-        Navigator.pushReplacementNamed(context, DashboardScreen.path);
+        Navigator.pushReplacementNamed(context, AdminOrNurseScreen.path);
       }else{
-        Navigator.pushReplacementNamed(context, LoginScreen.path);
+        Navigator.pushReplacementNamed(context, AdminOrNurseScreen.path);
       }
 
     });

@@ -2,15 +2,18 @@
 
 import 'dart:convert';
 
-import 'package:admin_dashboard/ui/screens/dashboard/dashboard_screen.dart';
+import 'package:admin_dashboard/app/app_constants.dart';
+import 'package:admin_dashboard/app/helper/shared_preference_helper.dart';
+import 'package:admin_dashboard/data/nurse/model/user_detail_model.dart';
+import 'package:admin_dashboard/ui/admin/screens/admin_homescreen.dart';
+
+import 'package:admin_dashboard/ui/nurse/screens/dashboard/dashboard_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-import '../../app/app_constants.dart';
-import '../../app/helper/shared_preference_helper.dart';
-import '../../data/model/user_detail_model.dart';
+import 'package:admin_dashboard/gen/colors.gen.dart';
+import 'package:flutter/material.dart';
 
 class AuthBloc{
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -18,7 +21,7 @@ class AuthBloc{
 
   UserDetails? userDetails;
 
-  Future signInWithGoogle(BuildContext context) async {
+  Future signInWithGoogle(BuildContext context,{required isFromAdmin}) async {
 
     try {
       // Check if Firebase is initialized
@@ -81,7 +84,11 @@ class AuthBloc{
         SharedPrefService.instance.setString(AppConstants.accessToken, idToken??"");
         SharedPrefService.instance.setString(AppConstants.userId, userCredential.user?.uid??"");
         userDetails = await getUserDetails();
-        Navigator.pushReplacementNamed(context, DashboardScreen.path);
+        if (isFromAdmin) {
+          Navigator.pushReplacementNamed(context, AdminHomescreen.path);
+        } else {
+          Navigator.pushReplacementNamed(context, DashboardScreen.path);
+        }
       } catch (apiError) {
         print('⚠️ Backend API call failed: $apiError');
         // Continue anyway - user is authenticated with Firebase
