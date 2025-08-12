@@ -5,6 +5,7 @@ import 'package:admin_dashboard/ui/nurse/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import '../../../data/nurse/model/admin/nurse_list_model.dart';
 import '../../nurse/widgets/custom_exit.dart';
 import '../bloc/admin_bloc.dart';
 
@@ -22,6 +23,10 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
   String nurseName = "Janet Jose";
   // Example nurse name
 
+
+
+ // Example nurse name
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +35,69 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
 
   callNurseApi() async {
     await _bloc.getAllNurses();
+  }
+
+  Widget nurseProfileListview(
+      NursesList nurse,int index) {
+    return  GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NurseDetailesScreen(
+                nurseName: nurse.userName??"",
+                nurseId: {index + 1}.toString()
+            ),
+          ),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Container(
+          height: 70,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: ColorName.primary,
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 20,
+                  backgroundColor: ColorName.white,
+                  child: Icon(Icons.person, color: ColorName.primary, size: 30),
+                ),
+                Gap(10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomText(
+                      text: nurse.userName??"",
+                      style: TextStyle(
+                        color: ColorName.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    CustomText(
+                      text: "Nurse ID: ${index + 1}",
+                      style: TextStyle(
+                        color: ColorName.white,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
+                Spacer(),
+                Icon(Icons.arrow_forward_ios, color: ColorName.white, size: 20),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -54,18 +122,31 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                ListView.builder(
-                  itemCount: 10,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    int nurseId = index + 1; // increments from 1 to 10
-                    return nurseProfileListview(
-                      nurseId,
-                      nurseName,
-                      context, // pass BuildContext here
-                    );
-                  },
+                StreamBuilder<NurseDetailModel>(
+                  stream: _bloc.nurseListStream,
+                  builder: (context, snapshot) {
+                    switch(snapshot.connectionState){
+                      case ConnectionState.waiting:
+                        return Center(child: CircularProgressIndicator());
+                      case ConnectionState.active:
+                      case ConnectionState.done:
+                      if(snapshot.hasError){
+                        return Center(child: Text(snapshot.error.toString()),);
+                      }
+                        return ListView.builder(
+                          itemCount: snapshot.data?.users?.length??0,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return snapshot.data?.users?.isNotEmpty == true ?
+                            nurseProfileListview(snapshot.data!.users![index],index)
+                            :Center(child: Text("No nurses are available"));
+                          },
+                        );
+                      default:
+                        return Container();
+                    }
+                  }
                 ),
               ],
             ),
@@ -76,69 +157,5 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
   }
 }
 
-Widget nurseProfileListview(
-  int nurseId,
-  String nurseName,
-  BuildContext context,
-) {
-  return GestureDetector(
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder:
-              (context) => NurseDetailesScreen(
-                nurseName: nurseName,
-                nurseId: nurseId.toString(),
-              ),
-        ),
-      );
-    },
-    child: Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: Container(
-        height: 70,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: ColorName.primary,
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: ColorName.white,
-                child: Icon(Icons.person, color: ColorName.primary, size: 30),
-              ),
-              Gap(10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CustomText(
-                    text: nurseName,
-                    style: TextStyle(
-                      color: ColorName.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  CustomText(
-                    text: "Nurse ID: $nurseId",
-                    style: TextStyle(
-                      color: ColorName.white,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                ],
-              ),
-              Spacer(),
-              Icon(Icons.arrow_forward_ios, color: ColorName.white, size: 20),
-            ],
-          ),
-        ),
-      ),
-    ),
-  );
-}
+
+
