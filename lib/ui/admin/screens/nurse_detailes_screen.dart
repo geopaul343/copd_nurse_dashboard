@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:admin_dashboard/ui/nurse/widgets/custom_text.dart';
+import '../../../data/nurse/model/admin/nurse_list_model.dart';
 import 'pateint_list_toadd_nurse.dart'; // import
 
 class NurseDetailesScreen extends StatefulWidget {
   static const String path = '/nurse-details';
-  final String? nurseName;
-  final String? nurseId;
+  final NursesList nurse;
 
-  const NurseDetailesScreen({super.key, this.nurseName, this.nurseId});
+  const NurseDetailesScreen({super.key, required this.nurse});
 
   @override
   State<NurseDetailesScreen> createState() => _NurseDetailesScreenState();
@@ -21,7 +21,10 @@ class _NurseDetailesScreenState extends State<NurseDetailesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.nurseName ?? 'Nurse Details'),
+        title: Text(
+          widget.nurse?.userName??""
+
+        ),
         backgroundColor: Colors.blue.shade700,
         actions: [
           IconButton(

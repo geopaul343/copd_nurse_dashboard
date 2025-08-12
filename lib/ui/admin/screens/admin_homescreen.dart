@@ -1,11 +1,11 @@
-import 'package:admin_dashboard/data/nurse/model/admin/nurse_model.dart';
+import 'package:admin_dashboard/data/nurse/model/admin/nurse_list_model.dart';
+
 import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:admin_dashboard/ui/admin/screens/nurse_detailes_screen.dart';
 import 'package:admin_dashboard/ui/nurse/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import '../../../data/nurse/model/admin/nurse_list_model.dart';
 import '../../nurse/widgets/custom_exit.dart';
 import '../bloc/admin_bloc.dart';
 
@@ -41,14 +41,11 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
       NursesList nurse,int index) {
     return  GestureDetector(
       onTap: () {
-        Navigator.push(
+
+        Navigator.pushNamed(
           context,
-          MaterialPageRoute(
-            builder: (context) => NurseDetailesScreen(
-                nurseName: nurse.userName??"",
-                nurseId: {index + 1}.toString()
-            ),
-          ),
+          NurseDetailesScreen.path,
+          arguments: nurse,
         );
       },
       child: Padding(

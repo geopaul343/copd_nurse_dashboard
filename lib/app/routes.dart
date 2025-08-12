@@ -13,6 +13,8 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 
+import '../data/nurse/model/admin/nurse_list_model.dart';
+
 import '../data/nurse/model/nurse/search_user_model.dart';
 
 class Routes {
@@ -31,7 +33,10 @@ class Routes {
         return pageRoute(settings, AdminHomescreen());
      
        case NurseDetailesScreen.path:
-        return pageRoute(settings, NurseDetailesScreen());
+         NursesList nurse = settings.arguments as NursesList;
+        return pageRoute(settings, NurseDetailesScreen(nurse: nurse,  ));
+
+
       case PatientListToAddNurse.path:
         return pageRoute(settings, PatientListToAddNurse());
    
