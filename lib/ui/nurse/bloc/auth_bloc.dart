@@ -85,6 +85,7 @@ class AuthBloc{
      if (isFromAdmin) {
        Navigator.pushReplacementNamed(AppConstants.globalNavigatorKey.currentContext!, AdminHomescreen.path);
      } else {
+      // Navigator.pushReplacementNamed(AppConstants.globalNavigatorKey.currentContext!, DashboardScreen.path);
        Navigator.pushReplacementNamed(AppConstants.globalNavigatorKey.currentContext!, PatientHealthCheckupDetailsScreen.path,arguments: "dummy");
      }
    }else{
