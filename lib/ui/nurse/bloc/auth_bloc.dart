@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import '../../../data/nurse/model/nurse/user_detail_model.dart';
 import '../../../data/nurse/repository/auth/auth_repo_impl.dart';
 import '../../admin/widgets/custom_snackbar.dart';
+import '../screens/patient/patient_helth_checkup_details_screen.dart';
 
 class AuthBloc{
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -84,7 +85,7 @@ class AuthBloc{
      if (isFromAdmin) {
        Navigator.pushReplacementNamed(AppConstants.globalNavigatorKey.currentContext!, AdminHomescreen.path);
      } else {
-       Navigator.pushReplacementNamed(AppConstants.globalNavigatorKey.currentContext!, DashboardScreen.path);
+       Navigator.pushReplacementNamed(AppConstants.globalNavigatorKey.currentContext!, PatientHealthCheckupDetailsScreen.path,arguments: "dummy");
      }
    }else{
      SnackBarCustom.failure("Login Failed try Again");
