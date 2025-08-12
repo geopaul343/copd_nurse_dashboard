@@ -8,6 +8,8 @@ import 'package:admin_dashboard/ui/nurse/widgets/custom_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import '../../../admin/widgets/custom_exit.dart';
+
 
 class PatientHealthCheckupDetailsScreen extends StatefulWidget {
   static const String path = '/patient-health-checkup';
@@ -70,7 +72,14 @@ class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckup
         margin: EdgeInsets.only(bottom: 10),
         child: Row(
           children: [
-            Text("Grade: ${data.grade}"),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Grade: ${data.grade}"),
+                Text("User Name: ${data.userName}"),
+              ],
+            ),
             Spacer(),
             data.createdAt != null? Text("Date: ${DateConverter.isoStringToLocalDateOnly(data.createdAt!)}") : SizedBox(),
           ],
@@ -94,6 +103,7 @@ class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckup
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text("UserName: ${data.userName??"N/A"}"),
                 Text("Breathing: ${data.data?.breathing??"N/A"}"),
                 Text("DidShortWalk: ${data.data?.didShortWalk == true ? "Available" : "Not Available"}"),
                 Text("HasInhalerStock: ${data.data?.hasInhalerStock== true ? "Available" : "Not Available"}"),
@@ -139,7 +149,18 @@ class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckup
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Health data"),),
+      appBar: AppBar(title: Text("Health data"),
+        backgroundColor:  ColorName.primary.withValues(alpha: 0.50),
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout, color: Colors.white),
+            onPressed: ()async{
+              showExitDialog(context);
+
+            },
+          ),
+        ],),
       body: StreamBuilder<PatientCheckUpDataModel>(
     stream: _bloc.patientDataStream,
       builder: (context, snapshot) {

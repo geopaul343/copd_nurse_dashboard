@@ -57,12 +57,14 @@ class UserDailyDatum {
   UserDailyDatumData? data;
   String? isDailySubmitted;
   String? userId;
+  String? userName;
 
   UserDailyDatum({
     this.createdAt,
     this.data,
     this.isDailySubmitted,
     this.userId,
+    this.userName
   });
 
   factory UserDailyDatum.fromJson(Map<String, dynamic> json) => UserDailyDatum(
@@ -70,6 +72,7 @@ class UserDailyDatum {
     data: json["data"] == null ? null : UserDailyDatumData.fromJson(json["data"]),
     isDailySubmitted: json["is_daily_submitted"],
     userId: json["user_id"],
+    userName: json["user_name"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -77,6 +80,7 @@ class UserDailyDatum {
     "data": data?.toJson(),
     "is_daily_submitted": isDailySubmitted,
     "user_id": userId,
+    "user_name": userName,
   };
 }
 
@@ -169,6 +173,7 @@ class UserLyDatum {
   int? grade;
   bool? isMonthlySubmitted;
   String? userId;
+  String? userName;
   String? isWeeklySubmitted;
 
   UserLyDatum({
@@ -176,12 +181,14 @@ class UserLyDatum {
     this.grade,
     this.isMonthlySubmitted,
     this.userId,
+    this.userName,
     this.isWeeklySubmitted,
   });
 
   factory UserLyDatum.fromJson(Map<String, dynamic> json) => UserLyDatum(
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
     grade: json["grade"],
+    userName: json["user_name"],
     isMonthlySubmitted: json["is_monthly_submitted"],
     userId: json["user_id"],
     isWeeklySubmitted: json["is_weekly_submitted"],
@@ -190,6 +197,7 @@ class UserLyDatum {
   Map<String, dynamic> toJson() => {
     "created_at": createdAt?.toIso8601String(),
     "grade": grade,
+    "user_name": userName,
     "is_monthly_submitted": isMonthlySubmitted,
     "user_id":userId,
     "is_weekly_submitted": isWeeklySubmitted,
