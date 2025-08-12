@@ -6,5 +6,5 @@ abstract class AdminRepo{
 
   Future setPatientToNurse({required String nurseId, required List<String> userIds});
 
-  Future getNurseDetailById();
+  Future getNurseDetailById({required String nurseId});
 }

@@ -32,7 +32,8 @@ class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckup
   }
 
   callPatientDetailApi()async{
-    _bloc.getPatientCheckUpData(patientId: widget.patientId);
+   // _bloc.getPatientCheckUpData(patientId: widget.patientId);
+    _bloc.getPatientCheckUpDataById();
   }
 
   @override

@@ -59,4 +59,23 @@ class DashBoardRepoImpl extends DashBoardRepo{
     }
   }
 
+  @override
+  Future fetchPatientCheckupDataById() async{
+    final Map<String, dynamic> queryParams = {
+      'admin_id':  SharedPrefService.instance.getString(AppConstants.userId),
+
+    };
+    try{
+      final response = await _dio.get(
+          Urls.getPatientCheckUpById,
+          queryParameters: queryParams
+      );
+      return PatientCheckUpDataModel.fromJson(response.data);
+    }catch (e){
+      print("Erorr ====>wwwww ${e.toString()}");
+      throw ApiException(e);
+
+    }
+  }
+
 }

@@ -38,7 +38,8 @@ class Routes {
 
 
       case PatientListToAddNurse.path:
-        return pageRoute(settings, PatientListToAddNurse());
+        String nurseId = settings.arguments as String;
+        return pageRoute(settings, PatientListToAddNurse(nurseId: nurseId,));
    
  
       case DashboardScreen.path:

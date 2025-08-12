@@ -41,4 +41,13 @@ class DashboardBloc{
     }
   }
 
+  Future getPatientCheckUpDataById() async {
+    try{
+      PatientCheckUpDataModel response = await _repo.fetchPatientCheckupDataById();
+      _patientDataController.add(response);
+    }catch (e){
+      _patientDataController.addError(e.toString());
+    }
+  }
+
 }

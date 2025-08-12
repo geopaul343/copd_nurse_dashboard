@@ -11,6 +11,7 @@ import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../admin/screens/admin_homescreen.dart';
+import '../patient/patient_helth_checkup_details_screen.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -30,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(Duration(seconds: 3),(){
       if(SharedPrefService.instance.getString(AppConstants.userId) != null){
         if(SharedPrefService.instance.getInt(AppConstants.userType) == 2){
-          Navigator.pushReplacementNamed(context, DashboardScreen.path);
+          Navigator.pushReplacementNamed(context, PatientHealthCheckupDetailsScreen.path,arguments: "dummy");
         }else{
           Navigator.pushReplacementNamed(context, AdminHomescreen.path);
         }

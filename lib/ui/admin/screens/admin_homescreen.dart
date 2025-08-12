@@ -60,25 +60,30 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
                   child: Icon(Icons.person, color: ColorName.primary, size: 30),
                 ),
                 Gap(10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomText(
-                      text: nurse.userName??"",
-                      style: TextStyle(
-                        color: ColorName.white,
-                        fontWeight: FontWeight.bold,
+                Expanded(
+                  flex: 4,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        nurse.userName??"",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: ColorName.white,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
-                    CustomText(
-                      text: "Nurse ID: ${index + 1}",
-                      style: TextStyle(
-                        color: ColorName.white,
-                        fontWeight: FontWeight.normal,
+                      CustomText(
+                        text: "Nurse ID: ${index + 1}",
+                        style: TextStyle(
+                          color: ColorName.white,
+                          fontWeight: FontWeight.normal,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 Spacer(),
                 Icon(Icons.arrow_forward_ios, color: ColorName.white, size: 20),

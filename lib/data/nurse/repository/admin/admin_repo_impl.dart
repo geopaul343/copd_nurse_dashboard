@@ -2,6 +2,7 @@ import '../../../../app/app_constants.dart';
 import '../../../../app/helper/helper.dart';
 import '../../../../app/helper/shared_preference_helper.dart';
 import '../../../../di/di.dart';
+import '../../model/admin/admin_patients_list_model.dart';
 import '../../model/admin/nurse_list_model.dart';
 import '../../model/nurse/search_user_model.dart';
 import '../../network/dio_client.dart';
@@ -38,11 +39,16 @@ class AdminRepoImpl extends AdminRepo{
     };
     try{
       final response = await _dio.get(
-          Urls.getAllNurses,
+          Urls.getAllPatients,
           queryParameters: queryParams
       );
-      final cleanedData = AppHelper().cleanJsonResponse(response.data);
-      return SearchResponse.fromJson(cleanedData);
+      if (response.data != null && response.data["users"] is List) {
+        return (response.data["users"] as List)
+            .map((json) => AdminPatientsListModel.fromJson(json))
+            .toList();
+      } else {
+        throw ApiException('Invalid response format: No users found');
+      }
     }catch (e){
       print("Erorr ====>wwwww ${e.toString()}");
       throw ApiException(e);
@@ -51,16 +57,19 @@ class AdminRepoImpl extends AdminRepo{
   }
 
   @override
-  Future getNurseDetailById() async{
+  Future getNurseDetailById({required String nurseId}) async{
     final Map<String, dynamic> queryParams = {
       'admin_id':  SharedPrefService.instance.getString(AppConstants.userId),
+      'nurse_id':  nurseId
     };
     try{
       final response = await _dio.get(
-          Urls.getPatientCheckUp,
+          Urls.getPatientsByNurseId,
           queryParameters: queryParams
       );
-      return response;
+      return (response.data["users"] as List)
+          .map((json) => AdminPatientsListModel.fromJson(json))
+          .toList();
     }catch (e){
       print("Erorr ====>wwwww ${e.toString()}");
       throw ApiException(e);
@@ -73,14 +82,14 @@ class AdminRepoImpl extends AdminRepo{
     final Map<String, dynamic> queryParams = {
       'admin_id':  SharedPrefService.instance.getString(AppConstants.userId),
       'user_ids': userIds,
-      'nurseId': nurseId
+      'nurse_id': nurseId
     };
     try{
       final response = await _dio.post(
           Urls.apiAssignPatientToNurse,
           data: queryParams
       );
-      return response;
+      return response.data["message"];
     }catch (e){
       print("Erorr ====>wwwww ${e.toString()}");
       throw ApiException(e);
