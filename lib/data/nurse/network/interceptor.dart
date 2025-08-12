@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
 
+import '../../../ui/admin_or_nurse_screen.dart';
+
 class LoggingInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
@@ -50,7 +52,7 @@ class LoggingInterceptor extends Interceptor {
     if (err.response?.statusCode == 401) {
       SnackBarCustom.failure("Session Expired");
       await SharedPrefService.instance.clearPrefs();
-      Navigator.pushReplacementNamed(AppConstants.globalNavigatorKey.currentContext!, LoginScreen.path);
+      Navigator.pushReplacementNamed(AppConstants.globalNavigatorKey.currentContext!, AdminOrNurseScreen.path);
     }
      super.onError(err, handler);
   }

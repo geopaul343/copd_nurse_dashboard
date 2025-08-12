@@ -17,7 +17,7 @@ class AuthRepoImpl extends AuthRepo {
   Future login({required String email, required String userId, required String userName}) async{
     final queryParams = {
       'user_name': userName,
-      'email': 'email',
+      'email': email,
       'user_id': userId,
       'user_type': SharedPrefService.instance.getInt(AppConstants.userType),
     };

@@ -20,12 +20,6 @@ class AdminHomescreen extends StatefulWidget {
 class _AdminHomescreenState extends State<AdminHomescreen> {
   final AdminBloc _bloc = AdminBloc();
 
-  String nurseName = "Janet Jose";
-  // Example nurse name
-
-
-
- // Example nurse name
 
   @override
   void initState() {
@@ -41,7 +35,6 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
       NursesList nurse,int index) {
     return  GestureDetector(
       onTap: () {
-
         Navigator.pushNamed(
           context,
           NurseDetailesScreen.path,
