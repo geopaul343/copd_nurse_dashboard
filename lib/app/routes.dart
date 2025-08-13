@@ -2,13 +2,14 @@ import 'package:admin_dashboard/ui/admin/screens/admin_homescreen.dart';
 import 'package:admin_dashboard/ui/admin/screens/admin_login_screen.dart';
 import 'package:admin_dashboard/ui/admin/screens/nurse_detailes_screen.dart';
 import 'package:admin_dashboard/ui/admin/screens/pateint_list_toadd_nurse_screen.dart';
-import 'package:admin_dashboard/ui/admin_or_nurse_screen.dart';
-import 'package:admin_dashboard/ui/nurse/screens/auth/login_screen.dart';
+import 'package:admin_dashboard/ui/screens/admin_or_nurse_screen.dart';
+
 import 'package:admin_dashboard/ui/nurse/screens/dashboard/dashboard_screen.dart';
 import 'package:admin_dashboard/ui/nurse/screens/patient/patient_detail_screen.dart';
 import 'package:admin_dashboard/ui/nurse/screens/patient/patient_helth_checkup_details_screen.dart';
 import 'package:admin_dashboard/ui/nurse/screens/patient/patients_list_screen.dart';
-import 'package:admin_dashboard/ui/nurse/screens/splash/splash.dart';
+import 'package:admin_dashboard/ui/screens/splash/splash.dart';
+
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ import 'package:flutter/material.dart';
 import '../data/nurse/model/admin/nurse_list_model.dart';
 
 import '../data/nurse/model/nurse/search_user_model.dart';
+import '../ui/screens/auth/login_screen.dart';
 
 class Routes {
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {

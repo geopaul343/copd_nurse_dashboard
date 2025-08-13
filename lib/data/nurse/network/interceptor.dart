@@ -1,7 +1,7 @@
 import 'package:admin_dashboard/app/app_constants.dart';
 import 'package:admin_dashboard/app/helper/shared_preference_helper.dart';
 
-import 'package:admin_dashboard/ui/nurse/screens/auth/login_screen.dart';
+
 import 'package:admin_dashboard/ui/widgets/custom_snackbar.dart';
 import 'package:dio/dio.dart';
 
@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
 
-import '../../../ui/admin_or_nurse_screen.dart';
+import '../../../ui/screens/admin_or_nurse_screen.dart';
 
 class LoggingInterceptor extends Interceptor {
   @override

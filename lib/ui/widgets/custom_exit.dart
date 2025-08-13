@@ -1,4 +1,4 @@
-import 'package:admin_dashboard/ui/admin_or_nurse_screen.dart';
+import 'package:admin_dashboard/ui/screens/admin_or_nurse_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
