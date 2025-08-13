@@ -1,7 +1,8 @@
 import 'package:admin_dashboard/app/style_guide/dimensions.dart';
 import 'package:admin_dashboard/ui/admin/screens/admin_login_screen.dart';
 import 'package:admin_dashboard/ui/nurse/screens/auth/login_screen.dart';
-import 'package:admin_dashboard/ui/nurse/widgets/custom_text.dart';
+
+import 'package:admin_dashboard/ui/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 

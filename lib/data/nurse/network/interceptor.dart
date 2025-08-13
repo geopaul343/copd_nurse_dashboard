@@ -2,7 +2,7 @@ import 'package:admin_dashboard/app/app_constants.dart';
 import 'package:admin_dashboard/app/helper/shared_preference_helper.dart';
 
 import 'package:admin_dashboard/ui/nurse/screens/auth/login_screen.dart';
-import 'package:admin_dashboard/ui/nurse/widgets/custom_snackbar.dart';
+import 'package:admin_dashboard/ui/widgets/custom_snackbar.dart';
 import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';

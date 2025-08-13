@@ -1,13 +1,13 @@
 
 import 'dart:async';
 
+import 'package:admin_dashboard/ui/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 
 import '../../../app/app_constants.dart';
 import '../../../data/nurse/model/admin/admin_patients_list_model.dart';
 import '../../../data/nurse/model/admin/nurse_list_model.dart';
 import '../../../data/nurse/repository/admin/admin_repo_impl.dart';
-import '../../nurse/widgets/custom_snackbar.dart';
 
 class AdminBloc{
 

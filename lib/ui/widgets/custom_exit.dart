@@ -1,8 +1,9 @@
+import 'package:admin_dashboard/ui/admin_or_nurse_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../app/helper/shared_preference_helper.dart';
-import '../../admin_or_nurse_screen.dart';
+
   void showExitDialog(BuildContext context) {
     showDialog(
       context: context,

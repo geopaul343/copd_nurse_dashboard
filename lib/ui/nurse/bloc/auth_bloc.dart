@@ -4,9 +4,11 @@ import 'dart:convert';
 
 import 'package:admin_dashboard/app/app_constants.dart';
 import 'package:admin_dashboard/app/helper/shared_preference_helper.dart';
+import 'package:admin_dashboard/data/nurse/repository/auth/auth_repo_impl.dart';
 import 'package:admin_dashboard/ui/admin/screens/admin_homescreen.dart';
 
 import 'package:admin_dashboard/ui/nurse/screens/dashboard/dashboard_screen.dart';
+import 'package:admin_dashboard/ui/widgets/custom_snackbar.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,8 +17,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 
 import '../../../data/nurse/model/nurse/user_detail_model.dart';
-import '../../../data/nurse/repository/auth/auth_repo_impl.dart';
-import '../../admin/widgets/custom_snackbar.dart';
+
 import '../screens/patient/patient_helth_checkup_details_screen.dart';
 
 class AuthBloc{

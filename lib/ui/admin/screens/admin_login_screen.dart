@@ -2,7 +2,8 @@ import 'package:admin_dashboard/app/string_constants.dart';
 import 'package:admin_dashboard/gen/assets.gen.dart';
 import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:admin_dashboard/ui/nurse/bloc/auth_bloc.dart';
-import 'package:admin_dashboard/ui/nurse/widgets/custom_text.dart';
+import 'package:admin_dashboard/ui/widgets/custom_text.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gap/gap.dart';

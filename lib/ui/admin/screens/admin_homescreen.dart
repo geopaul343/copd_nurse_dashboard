@@ -1,10 +1,11 @@
 import 'package:admin_dashboard/data/nurse/model/admin/nurse_list_model.dart';
 import 'package:admin_dashboard/gen/colors.gen.dart';
+import 'package:admin_dashboard/ui/admin/bloc/admin_bloc.dart';
 import 'package:admin_dashboard/ui/admin/screens/nurse_detailes_screen.dart';
+import 'package:admin_dashboard/ui/widgets/custom_exit.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import '../../nurse/widgets/custom_exit.dart';
-import '../bloc/admin_bloc.dart';
+
 
 
 
@@ -187,21 +188,6 @@ import '../bloc/admin_bloc.dart';
 //   }
 // }
 
-
-import 'package:admin_dashboard/data/nurse/model/admin/nurse_list_model.dart';
-import 'package:admin_dashboard/gen/colors.gen.dart';
-import 'package:admin_dashboard/ui/admin/screens/nurse_detailes_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import '../../nurse/widgets/custom_exit.dart';
-import '../bloc/admin_bloc.dart';
-import 'package:admin_dashboard/data/nurse/model/admin/nurse_list_model.dart';
-import 'package:admin_dashboard/gen/colors.gen.dart';
-import 'package:admin_dashboard/ui/admin/screens/nurse_detailes_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import '../../nurse/widgets/custom_exit.dart';
-import '../bloc/admin_bloc.dart';
 
 class AdminHomescreen extends StatefulWidget {
   static const String path = '/admin-homescreen';
