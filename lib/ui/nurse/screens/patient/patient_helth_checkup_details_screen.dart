@@ -4,12 +4,12 @@ import 'package:admin_dashboard/data/nurse/model/nurse/patient_checkup_data_mode
 import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:admin_dashboard/ui/nurse/bloc/dashboard_bloc.dart';
 import 'package:admin_dashboard/ui/nurse/widgets/custom_audio_player.dart';
+import 'package:admin_dashboard/ui/nurse/widgets/custom_exit.dart';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import '../../../admin/widgets/custom_exit.dart';
-
 
 class PatientHealthCheckupDetailsScreen extends StatefulWidget {
   static const String path = '/patient-health-checkup';
@@ -17,14 +17,16 @@ class PatientHealthCheckupDetailsScreen extends StatefulWidget {
   const PatientHealthCheckupDetailsScreen({super.key, required this.patientId});
 
   @override
-  State<PatientHealthCheckupDetailsScreen> createState() => _PatientHealthCheckupDetailsScreenState();
+  State<PatientHealthCheckupDetailsScreen> createState() =>
+      _PatientHealthCheckupDetailsScreenState();
 }
 
-class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckupDetailsScreen> with SingleTickerProviderStateMixin {
+class _PatientHealthCheckupDetailsScreenState
+    extends State<PatientHealthCheckupDetailsScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   final DashboardBloc _bloc = DashboardBloc();
-
 
   @override
   void initState() {
@@ -33,8 +35,8 @@ class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckup
     callPatientDetailApi();
   }
 
-  callPatientDetailApi()async{
-   // _bloc.getPatientCheckUpData(patientId: widget.patientId);
+  callPatientDetailApi() async {
+    // _bloc.getPatientCheckUpData(patientId: widget.patientId);
     _bloc.getPatientCheckUpDataById();
   }
 
@@ -44,7 +46,7 @@ class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckup
     super.dispose();
   }
 
-  Widget _tabBarView(){
+  Widget _tabBarView() {
     return TabBar(
       controller: _tabController,
       dividerColor: ColorName.primary,
@@ -58,136 +60,194 @@ class _PatientHealthCheckupDetailsScreenState extends State<PatientHealthCheckup
     );
   }
 
-
-  Widget _monthlyAndWeeklyView(List<UserLyDatum>? userMonthlyData,MonthlyAndWeeklyType type){
-    return userMonthlyData == null || userMonthlyData.isEmpty? Center(child: Text("No Details Found!"),):SingleChildScrollView(
-      child: Column(children: userMonthlyData.map((data) =>
-      Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: ColorName.primary.withValues(alpha: 0.70)
-        ),
-        padding: EdgeInsets.symmetric(vertical: 20,horizontal: 20),
-        margin: EdgeInsets.only(bottom: 10),
-        child: Row(
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Grade: ${data.grade}"),
-                Text("User Name: ${data.userName}"),
-              ],
-            ),
-            Spacer(),
-            data.createdAt != null? Text("Date: ${DateConverter.isoStringToLocalDateOnly(data.createdAt!)}") : SizedBox(),
-          ],
-        ),
-      )).toList(),),
-    );
+  Widget _monthlyAndWeeklyView(
+    List<UserLyDatum>? userMonthlyData,
+    MonthlyAndWeeklyType type,
+  ) {
+    return userMonthlyData == null || userMonthlyData.isEmpty
+        ? Center(child: Text("No Details Found!"))
+        : SingleChildScrollView(
+          child: Column(
+            children:
+                userMonthlyData
+                    .map(
+                      (data) => Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: ColorName.primary.withValues(alpha: 0.70),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          vertical: 20,
+                          horizontal: 20,
+                        ),
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: Row(
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Grade: ${data.grade}"),
+                                Text("User Name: ${data.userName}"),
+                              ],
+                            ),
+                            Spacer(),
+                            data.createdAt != null
+                                ? Text(
+                                  "Date: ${DateConverter.isoStringToLocalDateOnly(data.createdAt!)}",
+                                )
+                                : SizedBox(),
+                          ],
+                        ),
+                      ),
+                    )
+                    .toList(),
+          ),
+        );
   }
 
-  Widget _dailyView(List<UserDailyDatum>? userData){
-    return userData == null || userData.isEmpty? Center(child: Text("No Details Found!"),):SingleChildScrollView(
-      child: Column(children: userData.map((data) =>
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: ColorName.primary.withValues(alpha: 0.50)
-            ),
-            padding: EdgeInsets.symmetric(vertical: 20,horizontal: 20),
-            margin: EdgeInsets.only(bottom: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("UserName: ${data.userName??"N/A"}"),
-                Text("Breathing: ${data.data?.breathing??"N/A"}"),
-                Text("DidShortWalk: ${data.data?.didShortWalk == true ? "Available" : "Not Available"}"),
-                Text("HasInhalerStock: ${data.data?.hasInhalerStock== true ? "Available" : "Not Available"}"),
-                Text("PhlegmChange: ${data.data?.phlegmChange??"N/A"}"),
-                Text("PhlegmColor: ${data.data?.phlegmColor??"N/A"}"),
-                Text("RelieverPuffs: ${data.data?.relieverPuffs??"N/A"}"),
-                Text("spo2: ${data.data?.spo2??"N/A"}"),
-                Text("TookRegularInhaler: ${data.data?.tookRegularInhaler == true ? "Available" : "Not Available"}"),
-                Text("UsedOxygenAsPrescribed: ${data.data?.usedOxygenAsPrescribed == true ? "Available" : "Not Available"}"),
-                data.createdAt != null? Text("Date: ${DateConverter.isoStringToLocalDateOnly(data.createdAt!)}") : SizedBox(),
-                if(data.data?.lungSoundRecordings != null || data.data?.lungSoundRecordings?.isNotEmpty == true) ...[
-                Text("Audios "),
-                Row(
-                    children:
-                    data.data!.lungSoundRecordings!.map((audio) =>
-                    Padding(
-                      padding: const EdgeInsets.only(right: 5),
-                      child: AudioWidget(url: audio.fileUri??""),
-                    )).toList()
-                )
-                ]
-              ],
-            ),
-          )).toList(),),
-    );
+  Widget _dailyView(List<UserDailyDatum>? userData) {
+    return userData == null || userData.isEmpty
+        ? Center(child: Text("No Details Found!"))
+        : SingleChildScrollView(
+          child: Column(
+            children:
+                userData
+                    .map(
+                      (data) => Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: ColorName.primary.withValues(alpha: 0.50),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          vertical: 20,
+                          horizontal: 20,
+                        ),
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("UserName: ${data.userName ?? "N/A"}"),
+                            Text("Breathing: ${data.data?.breathing ?? "N/A"}"),
+                            Text(
+                              "DidShortWalk: ${data.data?.didShortWalk == true ? "Available" : "Not Available"}",
+                            ),
+                            Text(
+                              "HasInhalerStock: ${data.data?.hasInhalerStock == true ? "Available" : "Not Available"}",
+                            ),
+                            Text(
+                              "PhlegmChange: ${data.data?.phlegmChange ?? "N/A"}",
+                            ),
+                            Text(
+                              "PhlegmColor: ${data.data?.phlegmColor ?? "N/A"}",
+                            ),
+                            Text(
+                              "RelieverPuffs: ${data.data?.relieverPuffs ?? "N/A"}",
+                            ),
+                            Text("spo2: ${data.data?.spo2 ?? "N/A"}"),
+                            Text(
+                              "TookRegularInhaler: ${data.data?.tookRegularInhaler == true ? "Available" : "Not Available"}",
+                            ),
+                            Text(
+                              "UsedOxygenAsPrescribed: ${data.data?.usedOxygenAsPrescribed == true ? "Available" : "Not Available"}",
+                            ),
+                            data.createdAt != null
+                                ? Text(
+                                  "Date: ${DateConverter.isoStringToLocalDateOnly(data.createdAt!)}",
+                                )
+                                : SizedBox(),
+                            if (data.data?.lungSoundRecordings != null ||
+                                data.data?.lungSoundRecordings?.isNotEmpty ==
+                                    true) ...[
+                              Text("Audios "),
+                              Row(
+                                children:
+                                    data.data!.lungSoundRecordings!
+                                        .map(
+                                          (audio) => Padding(
+                                            padding: const EdgeInsets.only(
+                                              right: 5,
+                                            ),
+                                            child: AudioWidget(
+                                              url: audio.fileUri ?? "",
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    )
+                    .toList(),
+          ),
+        );
   }
 
-
-  Widget _tabBarContentView(PatientCheckUpDataModel? data){
+  Widget _tabBarContentView(PatientCheckUpDataModel? data) {
     return TabBarView(
-    controller: _tabController,
-    children: [
-      // Content for Daily Tab
-      _dailyView(data?.data?.userDailyData),
-      // Content for Weekly Tab
-      _monthlyAndWeeklyView(data?.data?.userWeeklyData,MonthlyAndWeeklyType.week),
-      // Content for Monthly Tab
-      _monthlyAndWeeklyView(data?.data?.userMonthlyData,MonthlyAndWeeklyType.month),
-    ],
+      controller: _tabController,
+      children: [
+        // Content for Daily Tab
+        _dailyView(data?.data?.userDailyData),
+        // Content for Weekly Tab
+        _monthlyAndWeeklyView(
+          data?.data?.userWeeklyData,
+          MonthlyAndWeeklyType.week,
+        ),
+        // Content for Monthly Tab
+        _monthlyAndWeeklyView(
+          data?.data?.userMonthlyData,
+          MonthlyAndWeeklyType.month,
+        ),
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Health data"),
-        backgroundColor:  ColorName.primary.withValues(alpha: 0.50),
+      appBar: AppBar(
+        title: Text("Health data"),
+        backgroundColor: ColorName.primary.withValues(alpha: 0.50),
         elevation: 0,
         actions: [
           IconButton(
             icon: Icon(Icons.logout, color: Colors.white),
-            onPressed: ()async{
+            onPressed: () async {
               showExitDialog(context);
-
             },
           ),
-        ],),
+        ],
+      ),
       body: StreamBuilder<PatientCheckUpDataModel>(
-    stream: _bloc.patientDataStream,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              children: [
-                Gap(20),
-                _tabBarView(),
-                Gap(10),
-                Expanded(child:
-                _tabBarContentView(snapshot.data)
-                )
-              ],
-            )
-          );
-        } else if (snapshot.hasError) {
-          return Center(child: Text(snapshot.error.toString()));
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      },
-    ),
+        stream: _bloc.patientDataStream,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                children: [
+                  Gap(20),
+                  _tabBarView(),
+                  Gap(10),
+                  Expanded(child: _tabBarContentView(snapshot.data)),
+                ],
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Center(child: Text(snapshot.error.toString()));
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
     );
   }
 }
 
-
-enum MonthlyAndWeeklyType{week,month}
+enum MonthlyAndWeeklyType { week, month }
