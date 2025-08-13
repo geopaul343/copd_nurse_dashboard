@@ -52,4 +52,12 @@ class ColorName {
 
   /// Color: #FFFFFF
   static const Color white = Color(0xFFFFFFFF);
+
+
+  /// Color: #FF0000
+  static const Color black  = Color(0xFF000000);
+
+
+  /// Color: #FF0000
+  static const Color red = Color(0xFFFF0000);
 }

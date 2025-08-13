@@ -31,17 +31,15 @@ class Routes {
         return pageRoute(settings, const AdminLoginScreen());
       case AdminHomescreen.path:
         return pageRoute(settings, AdminHomescreen());
-     
-       case NurseDetailesScreen.path:
-         NursesList nurse = settings.arguments as NursesList;
-        return pageRoute(settings, NurseDetailesScreen(nurse: nurse,  ));
 
+      case NurseDetailesScreen.path:
+        NursesList nurse = settings.arguments as NursesList;
+        return pageRoute(settings, NurseDetailesScreen(nurse: nurse));
 
-      case PatientListToAddNurse.path:
+      case PatientListToAddNurseScreen.path:
         String nurseId = settings.arguments as String;
-        return pageRoute(settings, PatientListToAddNurse(nurseId: nurseId,));
-   
- 
+        return pageRoute(settings, PatientListToAddNurseScreen(nurseId: nurseId));
+
       case DashboardScreen.path:
         return pageRoute(settings, const DashboardScreen());
       case PatientsListScreen.path:
