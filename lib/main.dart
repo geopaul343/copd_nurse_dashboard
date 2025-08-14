@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'app/app_constants.dart';
 import 'app/routes.dart';
@@ -42,6 +43,56 @@ class MyApp extends StatelessWidget {
       supportedLocales: const [Locale('en', 'IN')],
       locale: const Locale('en', 'IN'),
       title: AppConstants.appTitle,
+    );
+  }
+}
+
+
+class DateDropdownExample extends StatefulWidget {
+  @override
+  _DateDropdownExampleState createState() => _DateDropdownExampleState();
+}
+
+class _DateDropdownExampleState extends State<DateDropdownExample> {
+  String? selectedDate;
+  List<String> dateList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _generateDateList();
+  }
+
+  void _generateDateList() {
+    DateTime today = DateTime.now();
+    for (int i = 0; i < 7; i++) {
+      DateTime date = today.subtract(Duration(days: i));
+      String formattedDate = DateFormat('dd MMM yyyy').format(date);
+      dateList.add(formattedDate);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Date Dropdown')),
+      body: Center(
+        child: DropdownButton<String>(
+          hint: Text("Select a Date"),
+          value: selectedDate,
+          items: dateList.map((date) {
+            return DropdownMenuItem(
+              value: date,
+              child: Text(date),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              selectedDate = value;
+            });
+          },
+        ),
+      ),
     );
   }
 }

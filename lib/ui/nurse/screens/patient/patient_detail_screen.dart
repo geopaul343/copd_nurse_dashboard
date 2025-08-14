@@ -122,6 +122,9 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
       ),
     );
   }
+
+
+
 //
   Widget _buildQuickStatsSection() {
     return Padding(
