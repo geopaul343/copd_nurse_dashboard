@@ -17,6 +17,7 @@ class DashboardBloc {
   Stream<PatientCheckUpDataModel> get patientDataStream =>
       _patientDataController.stream;
 
+
   Future searchUser({required String name}) async {
     try {
       SearchResponse response = await _repo.searchUser(name: name);
