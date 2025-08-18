@@ -3,6 +3,8 @@ import 'package:admin_dashboard/data/nurse/model/nurse/patient_checkup_data_mode
 
 import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:admin_dashboard/ui/nurse/bloc/dashboard_bloc.dart';
+import 'package:admin_dashboard/ui/nurse/screens/patient/patient_detail_screen.dart';
+import 'package:admin_dashboard/ui/screens/onBoarding/onBoarding.dart';
 
 import 'package:admin_dashboard/ui/widgets/custom_audio_player.dart';
 import 'package:admin_dashboard/ui/widgets/custom_exit.dart';
@@ -29,6 +31,7 @@ class _PatientHealthCheckupDetailsScreenState
 
   final DashboardBloc _bloc = DashboardBloc();
   final AudioPlayerController _audioController = AudioPlayerController();
+  bool _groupByDate = true;
 
   bool _isSameDay(DateTime? a, DateTime b) {
     if (a == null) return false;
@@ -85,6 +88,24 @@ class _PatientHealthCheckupDetailsScreenState
         Tab(icon: Icon(Icons.calendar_month), text: 'Monthly'),
       ],
       labelColor: ColorName.primary,
+    );
+  }
+
+  Widget _weeklyGroupingToggle() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text("Group by date"),
+        Switch(
+          value: _groupByDate,
+          onChanged: (v) {
+            _audioController.playerStop();
+            setState(() {
+              _groupByDate = v;
+            });
+          },
+        ),
+      ],
     );
   }
 
@@ -212,6 +233,45 @@ class _PatientHealthCheckupDetailsScreenState
           );
         }
 
+        // Flat users list for the entire week (no day separation)
+        Widget usersListFlat = Column(
+          children:
+              items
+                  .map(
+                    (data) => Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: ColorName.primary.withValues(alpha: 0.70),
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 20,
+                        horizontal: 20,
+                      ),
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: Row(
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Grade: ${data.grade}"),
+                              Text("User Name: ${data.userName}"),
+                            ],
+                          ),
+                          Spacer(),
+                          data.createdAt != null
+                              ? Text(
+                                "Date: ${DateConverter.isoStringToLocalDateOnly(data.createdAt!)}",
+                              )
+                              : SizedBox(),
+                        ],
+                      ),
+                    ),
+                  )
+                  .toList(),
+        );
+
         if (isCurrent) {
           weekWidgets.add(
             Container(
@@ -235,7 +295,10 @@ class _PatientHealthCheckupDetailsScreenState
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Column(children: dayTiles),
+                    child:
+                        _groupByDate
+                            ? Column(children: dayTiles)
+                            : usersListFlat,
                   ),
                 ],
               ),
@@ -284,7 +347,10 @@ class _PatientHealthCheckupDetailsScreenState
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Column(children: dayTiles),
+                      child:
+                          _groupByDate
+                              ? Column(children: dayTiles)
+                              : usersListFlat,
                     ),
                   ],
                   onExpansionChanged: (_) => _audioController.playerStop(),
@@ -552,9 +618,16 @@ class _PatientHealthCheckupDetailsScreenState
         // Content for Daily Tab
         _dailyView(data?.data?.userDailyData),
         // Content for Weekly Tab
-        _monthlyAndWeeklyView(
-          data?.data?.userWeeklyData,
-          MonthlyAndWeeklyType.week,
+        Column(
+          children: [
+            _weeklyGroupingToggle(),
+            Expanded(
+              child: _monthlyAndWeeklyView(
+                data?.data?.userWeeklyData,
+                MonthlyAndWeeklyType.week,
+              ),
+            ),
+          ],
         ),
         // Content for Monthly Tab
         _monthlyAndWeeklyView(
@@ -574,9 +647,16 @@ class _PatientHealthCheckupDetailsScreenState
         elevation: 0,
         actions: [
           IconButton(
-            icon: Icon(Icons.logout, color: Colors.white),
+            icon: Icon(Icons.add, color: Colors.white),
             onPressed: () async {
-              showExitDialog(context);
+
+   Navigator.pushNamed(
+                        context,
+                        Onboarding.path,
+                   
+                      );
+
+            //  showExitDialog(context);
             },
           ),
         ],

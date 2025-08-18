@@ -8,6 +8,7 @@ import 'package:admin_dashboard/ui/nurse/screens/dashboard/dashboard_screen.dart
 import 'package:admin_dashboard/ui/nurse/screens/patient/patient_detail_screen.dart';
 import 'package:admin_dashboard/ui/nurse/screens/patient/patient_helth_checkup_details_screen.dart';
 import 'package:admin_dashboard/ui/nurse/screens/patient/patients_list_screen.dart';
+import 'package:admin_dashboard/ui/screens/onBoarding/onBoarding.dart';
 import 'package:admin_dashboard/ui/screens/splash/splash.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -50,6 +51,9 @@ class Routes {
           settings,
           PatientsListScreen(searchQuery: searchQuery),
         );
+
+        case Onboarding.path:
+        return pageRoute(settings, const Onboarding());
       case PatientDetailScreen.path:
         PatientUser userDetail = settings.arguments as PatientUser;
         return pageRoute(settings, PatientDetailScreen(userDetail: userDetail));

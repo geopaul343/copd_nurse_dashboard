@@ -1,13 +1,13 @@
 import 'dart:async';
-
 import 'package:admin_dashboard/data/nurse/model/nurse/patient_checkup_data_model.dart';
 import 'package:admin_dashboard/data/nurse/repository/dashboard/dashboard_repo_impl.dart';
-
 import '../../../data/nurse/model/nurse/search_user_model.dart';
+
+
+
 
 class DashboardBloc {
   final DashBoardRepoImpl _repo = DashBoardRepoImpl();
-
   final StreamController<List<PatientUser>> _searchController =
       StreamController<List<PatientUser>>();
   Stream<List<PatientUser>> get searchStream => _searchController.stream;
@@ -16,7 +16,6 @@ class DashboardBloc {
       StreamController<PatientCheckUpDataModel>();
   Stream<PatientCheckUpDataModel> get patientDataStream =>
       _patientDataController.stream;
-
 
   Future searchUser({required String name}) async {
     try {
