@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Primary Colors -->
-    <color name="primary">#983AFD</color>
-    <color name="darkPrimary">#0995C8</color>
+    <color name="primary">#983AFD</color> <!-- Prioritized from second block -->
+    <color name="darkPrimary">#0995C8</color> <!-- Prioritized from second block -->
 
     <!-- Text and Background Colors -->
     <color name="white">#FFFFFF</color>
+    <color name="black">#323232</color> <!-- Prioritized from first block for specificity -->
+    <color name="black1">#1F1F1F</color>
     <color name="textBlack">#262634</color>
     <color name="textBlue1">#1665C0</color>
+    <color name="text2">#51515D</color>
 
-    <!-- Background Shades (based on Material Blue shades) -->
-    <color name="lightBackgroundColor">#E3F2FD</color>  <!-- Colors.blue.shade50 -->
+    <!-- Background Shades -->
+    <color name="background">#EEEEF1</color>
+    <color name="lightBackgroundColor">#E3F2FD</color> <!-- Colors.blue.shade50 -->
     <color name="mediumBackgroundColor">#1E88E5</color> <!-- Colors.blue.shade600 -->
-    <color name="darkBackgroundColor">#1565C0</color>   <!-- Colors.blue.shade800 -->
+    <color name="darkBackgroundColor">#1565C0</color> <!-- Colors.blue.shade800 -->
 
     <!-- Greys -->
+    <color name="grey1">#F8F7FC</color>
+    <color name="grey2">#EFECF6</color>
+    <color name="grey3">#D6D4E0</color>
     <color name="grey500">#9E9E9E</color>
     <color name="grey600">#757575</color>
     <color name="grey800">#424242</color>
@@ -22,4 +29,14 @@
     <!-- Shadows with Opacity -->
     <color name="shadowAppLogoContainer">#3393F9F9</color> <!-- Colors.blue with 0.2 opacity -->
     <color name="shadowForAuthenticationContainer">#1A000000</color> <!-- Colors.black with 0.1 opacity -->
+
+    <!-- Other Colors -->
+    <color name="red">#FF0000</color> 
+    <color name="border">#E9E9E9</color>
+    <color name="p">#5F5F5F</color>
+    <color name="dropdownIconColor">#D1D1D5</color>
+    <color name="errorColor">#FFA4A4</color>
+    <color name="buttonBackground">#983AFD</color>
+    <color name="buttonBackgroundDisable">#D3BFE9</color>
+    <color name="orange">#FF9311</color>
 </resources>

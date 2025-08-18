@@ -2,6 +2,14 @@ import 'package:admin_dashboard/ui/admin/screens/admin_homescreen.dart';
 import 'package:admin_dashboard/ui/admin/screens/admin_login_screen.dart';
 import 'package:admin_dashboard/ui/admin/screens/nurse_detailes_screen.dart';
 import 'package:admin_dashboard/ui/admin/screens/pateint_list_toadd_nurse_screen.dart';
+import 'package:admin_dashboard/ui/onboarding/screens/auth/diagnosed_name_screen.dart';
+import 'package:admin_dashboard/ui/onboarding/screens/auth/enter_mobile_number_screen.dart';
+import 'package:admin_dashboard/ui/onboarding/screens/auth/otp_screen.dart';
+import 'package:admin_dashboard/ui/onboarding/screens/auth/select_language_screen.dart';
+import 'package:admin_dashboard/ui/onboarding/screens/daily_check_flow/daily_check_flow_screen.dart';
+import 'package:admin_dashboard/ui/onboarding/screens/onboarding/onboarding_screen.dart';
+import 'package:admin_dashboard/ui/onboarding/screens/onboarding/welcome_screen.dart';
+import 'package:admin_dashboard/ui/onboarding/screens/weekly_monthly_extra_checks/weekly_monthly_extra_check_screen.dart';
 import 'package:admin_dashboard/ui/screens/admin_or_nurse_screen.dart';
 
 import 'package:admin_dashboard/ui/nurse/screens/dashboard/dashboard_screen.dart';
@@ -24,6 +32,30 @@ class Routes {
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     Uri uri = Uri.parse(settings.name ?? "");
     switch (uri.path) {
+
+case SelectLanguageScreen.path:
+        return pageRoute(settings, const SelectLanguageScreen());
+      case EnterMobileNumberScreen.path:
+        return pageRoute(settings, const EnterMobileNumberScreen());
+      case OtpScreen.path:
+        String data = settings.arguments as String;
+        return pageRoute(settings, OtpScreen(phoneNumber: data));
+      case DiagnosedNameScreen.path:
+        return pageRoute(settings, const DiagnosedNameScreen());
+      case OnboardingScreen.path:
+        return pageRoute(settings, const OnboardingScreen());
+      case OnboardingWelcomeScreen.path:
+        return pageRoute(settings, const OnboardingWelcomeScreen());
+    case DailyCheckFlowScreen.path:
+      bool isSpeechEnable = settings.arguments as bool;
+    return pageRoute(settings, DailyCheckFlowScreen(isSpeechEnable: isSpeechEnable));
+      case WeeklyAndMonthlyCheckScreen.path:
+        bool isSpeechEnable = settings.arguments as bool;
+        return pageRoute(settings, WeeklyAndMonthlyCheckScreen(isSpeechEnable: isSpeechEnable));
+
+
+
+
       case SplashScreen.path:
         return pageRoute(settings, const SplashScreen());
       case LoginScreen.path:
