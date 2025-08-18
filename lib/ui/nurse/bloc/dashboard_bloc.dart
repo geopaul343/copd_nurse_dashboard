@@ -3,9 +3,6 @@ import 'package:admin_dashboard/data/nurse/model/nurse/patient_checkup_data_mode
 import 'package:admin_dashboard/data/nurse/repository/dashboard/dashboard_repo_impl.dart';
 import '../../../data/nurse/model/nurse/search_user_model.dart';
 
-
-
-
 class DashboardBloc {
   final DashBoardRepoImpl _repo = DashBoardRepoImpl();
   final StreamController<List<PatientUser>> _searchController =

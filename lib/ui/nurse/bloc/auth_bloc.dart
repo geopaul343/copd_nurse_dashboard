@@ -6,8 +6,6 @@ import 'package:admin_dashboard/app/app_constants.dart';
 import 'package:admin_dashboard/app/helper/shared_preference_helper.dart';
 import 'package:admin_dashboard/data/nurse/repository/auth/auth_repo_impl.dart';
 import 'package:admin_dashboard/ui/admin/screens/admin_homescreen.dart';
-
-import 'package:admin_dashboard/ui/nurse/screens/dashboard/dashboard_screen.dart';
 import 'package:admin_dashboard/ui/widgets/custom_snackbar.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';

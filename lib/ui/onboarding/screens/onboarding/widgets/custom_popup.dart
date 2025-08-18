@@ -1,24 +1,13 @@
-// import 'package:flutter/material.dart';
-
 import 'package:admin_dashboard/app/helper/onboarding_screen_list.dart';
 import 'package:admin_dashboard/data/nurse/model/nurse/onboarding/onboarding_model/customcard_model.dart';
 import 'package:admin_dashboard/data/nurse/model/nurse/onboarding/onboarding_model/yesorno_model.dart';
 import 'package:admin_dashboard/ui/onboarding/bloc/onBoardingBloc.dart';
 import 'package:admin_dashboard/ui/onboarding/widgets/coustom_button.dart';
 import 'package:flutter/material.dart';
-import 'package:admin_dashboard/gen/colors.gen.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:admin_dashboard/app/style_guide/typography.dart';
 import 'package:admin_dashboard/app/helper/text_to_audio_helper.dart';
-import 'package:admin_dashboard/app/string_constants.dart';
-
-
 import '../../../bloc/common/text_to_speech_bloc.dart';
-import '../../../bloc/daily_check_flow_bloc.dart';
 
-import '../../../bloc/common/text_to_speech_bloc.dart';
 
 class CustomPopup extends StatefulWidget {
   final OnboardingBloc bloc;

@@ -1,14 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:gap/gap.dart';
 import 'package:admin_dashboard/gen/colors.gen.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:admin_dashboard/app/style_guide/typography.dart';
 import 'package:admin_dashboard/app/helper/text_to_audio_helper.dart';
 import 'package:admin_dashboard/app/string_constants.dart';
-
-
 import '../../bloc/common/text_to_speech_bloc.dart';
 import '../../bloc/onBoardingBloc.dart';
 

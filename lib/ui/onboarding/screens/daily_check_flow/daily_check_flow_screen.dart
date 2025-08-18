@@ -9,20 +9,17 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:admin_dashboard/app/helper/text_to_audio_helper.dart';
 import 'package:admin_dashboard/app/string_constants.dart';
-import 'package:admin_dashboard/data/nurse/model/nurse/onboarding/onboarding_model/yesorno_model.dart';
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-
 import 'package:admin_dashboard/ui/onboarding/screens/daily_check_flow/views/q3_view.dart';
 import 'package:admin_dashboard/ui/onboarding/screens/daily_check_flow/views/q4_view.dart';
 import 'package:admin_dashboard/ui/onboarding/screens/daily_check_flow/views/q5_view.dart';
 import 'package:admin_dashboard/ui/onboarding/screens/daily_check_flow/views/q7_view.dart';
 import 'package:admin_dashboard/ui/onboarding/screens/daily_check_flow/views/q8_view.dart';
 import 'package:admin_dashboard/ui/onboarding/screens/daily_check_flow/widgets/answers_popup.dart';
- 
-import '../../bloc/common/text_to_speech_bloc.dart';
+ import '../../bloc/common/text_to_speech_bloc.dart';
 import '../../bloc/daily_check_flow_bloc.dart';
 import '../../widgets/coustom_button.dart';
+
+
 
 class DailyCheckFlowScreen extends StatefulWidget {
   static const String path = '/dailyCheckFlow';

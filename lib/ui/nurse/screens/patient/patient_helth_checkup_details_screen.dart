@@ -3,11 +3,9 @@ import 'package:admin_dashboard/data/nurse/model/nurse/patient_checkup_data_mode
 
 import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:admin_dashboard/ui/nurse/bloc/dashboard_bloc.dart';
-import 'package:admin_dashboard/ui/nurse/screens/patient/patient_detail_screen.dart';
 import 'package:admin_dashboard/ui/screens/onBoarding/onBoarding.dart';
 
 import 'package:admin_dashboard/ui/widgets/custom_audio_player.dart';
-import 'package:admin_dashboard/ui/widgets/custom_exit.dart';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
