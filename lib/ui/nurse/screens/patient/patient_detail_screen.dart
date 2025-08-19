@@ -1,6 +1,6 @@
 
 import 'package:admin_dashboard/gen/colors.gen.dart';
-import 'package:admin_dashboard/ui/nurse/screens/patient/patient_helth_checkup_details_screen.dart';
+import 'package:admin_dashboard/ui/nurse/screens/patient/patient_health_checkup_details_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';

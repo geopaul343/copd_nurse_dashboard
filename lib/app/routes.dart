@@ -14,7 +14,7 @@ import 'package:admin_dashboard/ui/screens/admin_or_nurse_screen.dart';
 
 import 'package:admin_dashboard/ui/nurse/screens/dashboard/dashboard_screen.dart';
 import 'package:admin_dashboard/ui/nurse/screens/patient/patient_detail_screen.dart';
-import 'package:admin_dashboard/ui/nurse/screens/patient/patient_helth_checkup_details_screen.dart';
+import 'package:admin_dashboard/ui/nurse/screens/patient/patient_health_checkup_details_screen.dart';
 import 'package:admin_dashboard/ui/nurse/screens/patient/patients_list_screen.dart';
 import 'package:admin_dashboard/ui/screens/onBoarding/onBoarding.dart';
 import 'package:admin_dashboard/ui/screens/splash/splash.dart';
@@ -32,8 +32,7 @@ class Routes {
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     Uri uri = Uri.parse(settings.name ?? "");
     switch (uri.path) {
-
-case SelectLanguageScreen.path:
+      case SelectLanguageScreen.path:
         return pageRoute(settings, const SelectLanguageScreen());
       case EnterMobileNumberScreen.path:
         return pageRoute(settings, const EnterMobileNumberScreen());
@@ -46,15 +45,18 @@ case SelectLanguageScreen.path:
         return pageRoute(settings, const OnboardingScreen());
       case OnboardingWelcomeScreen.path:
         return pageRoute(settings, const OnboardingWelcomeScreen());
-    case DailyCheckFlowScreen.path:
-      bool isSpeechEnable = settings.arguments as bool;
-    return pageRoute(settings, DailyCheckFlowScreen(isSpeechEnable: isSpeechEnable));
+      case DailyCheckFlowScreen.path:
+        bool isSpeechEnable = settings.arguments as bool;
+        return pageRoute(
+          settings,
+          DailyCheckFlowScreen(isSpeechEnable: isSpeechEnable),
+        );
       case WeeklyAndMonthlyCheckScreen.path:
         bool isSpeechEnable = settings.arguments as bool;
-        return pageRoute(settings, WeeklyAndMonthlyCheckScreen(isSpeechEnable: isSpeechEnable));
-
-
-
+        return pageRoute(
+          settings,
+          WeeklyAndMonthlyCheckScreen(isSpeechEnable: isSpeechEnable),
+        );
 
       case SplashScreen.path:
         return pageRoute(settings, const SplashScreen());
@@ -73,7 +75,10 @@ case SelectLanguageScreen.path:
 
       case PatientListToAddNurseScreen.path:
         String nurseId = settings.arguments as String;
-        return pageRoute(settings, PatientListToAddNurseScreen(nurseId: nurseId));
+        return pageRoute(
+          settings,
+          PatientListToAddNurseScreen(nurseId: nurseId),
+        );
 
       case DashboardScreen.path:
         return pageRoute(settings, const DashboardScreen());
@@ -81,10 +86,9 @@ case SelectLanguageScreen.path:
         String searchQuery = settings.arguments as String;
         return pageRoute(
           settings,
-          PatientsListScreen(searchQuery: searchQuery),
-        );
+          PatientsListScreen(searchQuery: searchQuery),);
 
-        case Onboarding.path:
+      case Onboarding.path:
         return pageRoute(settings, const Onboarding());
       case PatientDetailScreen.path:
         PatientUser userDetail = settings.arguments as PatientUser;

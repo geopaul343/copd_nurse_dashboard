@@ -15,6 +15,6 @@ PopupMenuButton<String> buildPatientPopupMenu({
         child: Text('View Patients'),
       ),
     ],
-    icon: Icon(Icons.more_vert),
+    icon: Icon(Icons.add, color: Colors.white), // ✅ custom icon here
   );
 }

@@ -42,10 +42,10 @@ class _PatientHealthCheckupDetailsScreenState
   ) {
     if (weekHeader.createdAt == null) return;
 
-    final bool isCurrent =
-        weekHeader.createdAt!.year == currentWeekStart.year &&
-        weekHeader.createdAt!.month == currentWeekStart.month &&
-        weekHeader.createdAt!.day == currentWeekStart.day;
+    final bool isCurrent = _bloc.isSameWeek(
+      weekHeader.createdAt,
+      currentWeekStart,
+    );
 
     // Group items by day for the toggle functionality
     final Map<DateTime, List<UserLyDatum>> dayToItems = {};

@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 
 import '../../../data/nurse/model/nurse/user_detail_model.dart';
 
-import '../screens/patient/patient_helth_checkup_details_screen.dart';
+import '../screens/patient/patient_health_checkup_details_screen.dart';
 
 class AuthBloc{
   final GoogleSignIn _googleSignIn = GoogleSignIn();
