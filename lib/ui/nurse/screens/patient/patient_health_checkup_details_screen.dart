@@ -338,42 +338,108 @@ class _PatientHealthCheckupDetailsScreenState
       return SingleChildScrollView(child: Column(children: weekWidgets));
     }
 
-    // Monthly: keep previous per-item behavior
-    List<Widget> children = [];
-    for (final data in userMonthlyData) {
-      final bool isCurrent = _bloc.isInCurrentMonth(data.createdAt);
+    // Monthly: group entries by date like daily view
+    Widget buildMonthlyContent(UserLyDatum data) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Grade: ${data.grade ?? "N/A"}"),
+          Text("User Name: ${data.userName ?? "N/A"}"),
+          data.createdAt != null
+              ? Text(
+                "Date: ${DateConverter.isoStringToLocalDateOnly(data.createdAt!)}",
+              )
+              : SizedBox(),
+        ],
+      );
+    }
 
-      if (isCurrent) {
+    // Group data by date (day)
+    final Map<DateTime, List<UserLyDatum>> dateToItems = {};
+    for (final item in userMonthlyData) {
+      if (item.createdAt == null) continue;
+      final dayKey = DateTime(
+        item.createdAt!.year,
+        item.createdAt!.month,
+        item.createdAt!.day,
+      );
+      dateToItems.putIfAbsent(dayKey, () => []);
+      dateToItems[dayKey]!.add(item);
+    }
+
+    // Sort dates (newest first)
+    final List<DateTime> sortedDates =
+        dateToItems.keys.toList()..sort((a, b) => b.compareTo(a));
+
+    List<Widget> children = [];
+    for (final date in sortedDates) {
+      final List<UserLyDatum> dayEntries =
+          dateToItems[date]!..sort((a, b) {
+            final da = a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+            final db = b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+            return db.compareTo(da);
+          });
+
+      final String dateLabel = DateConverter.isoStringToLocalDateOnly(date);
+      final bool isCurrentMonth = _bloc.isInCurrentMonth(date);
+
+      // Create list of all entries for this date
+      Widget entriesList = Column(
+        children:
+            dayEntries
+                .map(
+                  (data) => Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: ColorName.primary.withValues(alpha: 0.70),
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                    margin: EdgeInsets.only(bottom: 10),
+                    child: buildMonthlyContent(data),
+                  ),
+                )
+                .toList(),
+      );
+
+      if (isCurrentMonth) {
+        // Current month's data - always expanded
         children.add(
           Container(
             width: double.infinity,
+            margin: EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: ColorName.primary.withValues(alpha: 0.70),
+              color: ColorName.primary.withValues(alpha: 0.20),
             ),
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            margin: EdgeInsets.only(bottom: 10),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Grade: ${data.grade}"),
-                    Text("User Name: ${data.userName}"),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 20,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(child: Text(dateLabel)),
+                      Text(
+                        "${dayEntries.length} entr${dayEntries.length == 1 ? 'y' : 'ies'}",
+                      ),
+                    ],
+                  ),
                 ),
-                Spacer(),
-                data.createdAt != null
-                    ? Text(
-                      "Date: ${DateConverter.isoStringToLocalDateOnly(data.createdAt!)}",
-                    )
-                    : SizedBox(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: entriesList,
+                ),
               ],
             ),
           ),
         );
       } else {
+        // Past months - collapsible
         children.add(
           Container(
             width: double.infinity,
@@ -388,59 +454,17 @@ class _PatientHealthCheckupDetailsScreenState
               ).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
                 tilePadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                childrenPadding: EdgeInsets.only(
-                  bottom: 12,
-                  left: 16,
-                  right: 16,
-                ),
+                childrenPadding: EdgeInsets.only(bottom: 12, left: 8, right: 8),
                 title: Row(
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Month Summary"),
-                          Text("Grade: ${data.grade ?? "N/A"}"),
-                        ],
-                      ),
+                    Expanded(child: Text(dateLabel)),
+                    Text(
+                      "${dayEntries.length} entr${dayEntries.length == 1 ? 'y' : 'ies'}",
                     ),
-                    data.createdAt != null
-                        ? Text(
-                          DateConverter.isoStringToLocalDateOnly(
-                            data.createdAt!,
-                          ),
-                        )
-                        : SizedBox(),
                   ],
                 ),
-                children: [
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: ColorName.primary.withValues(alpha: 0.70),
-                    ),
-                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                    child: Row(
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Grade: ${data.grade}"),
-                            Text("User Name: ${data.userName}"),
-                          ],
-                        ),
-                        Spacer(),
-                        data.createdAt != null
-                            ? Text(
-                              "Date: ${DateConverter.isoStringToLocalDateOnly(data.createdAt!)}",
-                            )
-                            : SizedBox(),
-                      ],
-                    ),
-                  ),
-                ],
+                children: [entriesList],
+                onExpansionChanged: (_) => _audioController.playerStop(),
               ),
             ),
           ),
@@ -506,23 +530,91 @@ class _PatientHealthCheckupDetailsScreenState
       );
     }
 
+    // Group data by date (day)
+    final Map<DateTime, List<UserDailyDatum>> dateToItems = {};
+    for (final item in userData) {
+      if (item.createdAt == null) continue;
+      final dayKey = DateTime(
+        item.createdAt!.year,
+        item.createdAt!.month,
+        item.createdAt!.day,
+      );
+      dateToItems.putIfAbsent(dayKey, () => []);
+      dateToItems[dayKey]!.add(item);
+    }
+
+    // Sort dates (newest first)
+    final List<DateTime> sortedDates =
+        dateToItems.keys.toList()..sort((a, b) => b.compareTo(a));
+
     List<Widget> children = [];
-    for (final data in userData) {
-      final bool isToday = _bloc.isSameDay(data.createdAt, DateTime.now());
+    for (final date in sortedDates) {
+      final List<UserDailyDatum> dayEntries =
+          dateToItems[date]!..sort((a, b) {
+            final da = a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+            final db = b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+            return db.compareTo(da);
+          });
+
+      final String dateLabel = DateConverter.isoStringToLocalDateOnly(date);
+      final bool isToday = _bloc.isSameDay(date, DateTime.now());
+
+      // Create list of all entries for this date
+      Widget entriesList = Column(
+        children:
+            dayEntries
+                .map(
+                  (data) => Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: ColorName.primary.withValues(alpha: 0.70),
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                    margin: EdgeInsets.only(bottom: 10),
+                    child: buildDailyContent(data),
+                  ),
+                )
+                .toList(),
+      );
+
       if (isToday) {
+        // Today's data - always expanded
         children.add(
           Container(
             width: double.infinity,
+            margin: EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: ColorName.primary.withValues(alpha: 0.50),
+              color: ColorName.primary.withValues(alpha: 0.20),
             ),
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            margin: EdgeInsets.only(bottom: 10),
-            child: buildDailyContent(data),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 20,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(child: Text(dateLabel)),
+                      Text(
+                        "${dayEntries.length} entr${dayEntries.length == 1 ? 'y' : 'ies'}",
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: entriesList,
+                ),
+              ],
+            ),
           ),
         );
       } else {
+        // Past dates - collapsible
         children.add(
           Container(
             width: double.infinity,
@@ -537,43 +629,16 @@ class _PatientHealthCheckupDetailsScreenState
               ).copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
                 tilePadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                childrenPadding: EdgeInsets.only(
-                  bottom: 12,
-                  left: 16,
-                  right: 16,
-                ),
+                childrenPadding: EdgeInsets.only(bottom: 12, left: 8, right: 8),
                 title: Row(
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("${data.userName ?? "N/A"}"),
-                          Text(
-                            data.createdAt != null
-                                ? DateConverter.isoStringToLocalDateOnly(
-                                  data.createdAt!,
-                                )
-                                : "",
-                          ),
-                        ],
-                      ),
+                    Expanded(child: Text(dateLabel)),
+                    Text(
+                      "${dayEntries.length} entr${dayEntries.length == 1 ? 'y' : 'ies'}",
                     ),
-                    if (data.data?.spo2 != null)
-                      Text("SpO2: ${data.data!.spo2}"),
                   ],
                 ),
-                children: [
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: ColorName.primary.withValues(alpha: 0.50),
-                    ),
-                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                    child: buildDailyContent(data),
-                  ),
-                ],
+                children: [entriesList],
                 onExpansionChanged: (_) => _audioController.playerStop(),
               ),
             ),

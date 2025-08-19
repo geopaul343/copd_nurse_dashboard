@@ -548,7 +548,7 @@ class _PatientHealthCheckupDetailsScreenState
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("${data.userName ?? "N/A"}"),
+                          // Text(data.userName ?? "N/A"),
                           Text(
                             data.createdAt != null
                                 ? DateConverter.isoStringToLocalDateOnly(
@@ -660,3 +660,4 @@ class _PatientHealthCheckupDetailsScreenState
 }
 
 enum MonthlyAndWeeklyType { week, month }
+
