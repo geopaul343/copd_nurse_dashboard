@@ -7,14 +7,9 @@ import 'package:admin_dashboard/data/nurse/model/nurse/onboarding/onboarding_mod
 import 'package:admin_dashboard/ui/onboarding/widgets/coustom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:admin_dashboard/app/helper/text_to_audio_helper.dart';
-import 'package:admin_dashboard/app/string_constants.dart';
 import 'package:admin_dashboard/data/nurse/model/nurse/onboarding/onboarding_model/yesorno_model.dart';
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 
 
-import '../../../bloc/common/text_to_speech_bloc.dart';
-import '../../../bloc/daily_check_flow_bloc.dart';
 import '../../../bloc/common/text_to_speech_bloc.dart';
 import '../../../bloc/daily_check_flow_bloc.dart';
 

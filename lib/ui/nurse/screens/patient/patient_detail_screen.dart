@@ -67,7 +67,7 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 16),
+      Gap(16),
 
             // Patient Name
             Text(
@@ -78,14 +78,14 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 8),
+            Gap(8),
 
             // Patient ID
             Text(
               'Patient ID: ${widget.userDetail.id}',
               style: TextStyle(fontSize: 14, color: Colors.white70),
             ),
-            SizedBox(height: 8),
+            Gap(8),
 
             // Status Badge
             if (widget.userDetail.isUserActive != null)
@@ -205,7 +205,7 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
               ),
             ],
           ),
-          SizedBox(height: 8),
+          Gap(8),
           Text(
             value,
             style: TextStyle(

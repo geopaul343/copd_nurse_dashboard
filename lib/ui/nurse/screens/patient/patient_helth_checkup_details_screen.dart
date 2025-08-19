@@ -6,6 +6,7 @@ import 'package:admin_dashboard/ui/nurse/bloc/dashboard_bloc.dart';
 import 'package:admin_dashboard/ui/screens/onBoarding/onBoarding.dart';
 
 import 'package:admin_dashboard/ui/widgets/custom_audio_player.dart';
+import 'package:admin_dashboard/ui/widgets/custom_popup.dart';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -647,14 +648,24 @@ class _PatientHealthCheckupDetailsScreenState
           IconButton(
             icon: Icon(Icons.add, color: Colors.white),
             onPressed: () async {
+              buildPatientPopupMenu(
+                onSelected: (String value) {
+                  if (value == 'add_patient') {
+                    Navigator.pushNamed(context, Onboarding.path);
+                  } else if (value == 'view_patients') {
+                    // Logic to view patients
+                    print('View Patients selected');
+                  }
+                },
+              );
 
-   Navigator.pushNamed(
-                        context,
-                        Onboarding.path,
-                   
-                      );
+              //  Navigator.pushNamed(
+              //                       context,
+              //                       Onboarding.path,
 
-            //  showExitDialog(context);
+              //                     );
+
+              //  showExitDialog(context);
             },
           ),
         ],

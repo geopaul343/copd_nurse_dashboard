@@ -1,8 +1,5 @@
 import 'package:admin_dashboard/data/nurse/model/nurse/onboarding/onboarding_model/customcard_model.dart';
-import 'package:admin_dashboard/data/nurse/model/nurse/onboarding/onboarding_model/yesorno_model.dart';
 import 'package:admin_dashboard/ui/onboarding/widgets/custom_selection_card.dart';
-import 'package:admin_dashboard/ui/onboarding/widgets/custom_textFeild.dart';
-import 'package:admin_dashboard/ui/onboarding/widgets/custome_yesorno_card.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:admin_dashboard/ui/onboarding/bloc/onBoardingBloc.dart';
