@@ -30,7 +30,6 @@ class _PatientHealthCheckupDetailsScreenState
 
   final DashboardBloc _bloc = DashboardBloc();
   final AudioPlayerController _audioController = AudioPlayerController();
-  bool _groupByDate = true;
 
   // Using helper methods from DashboardBloc instead of duplicating logic
 
@@ -186,7 +185,9 @@ class _PatientHealthCheckupDetailsScreenState
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child:
-                    _groupByDate ? Column(children: dayTiles) : usersListFlat,
+                    _bloc.groupByDate
+                        ? Column(children: dayTiles)
+                        : usersListFlat,
               ),
             ],
           ),
@@ -225,7 +226,9 @@ class _PatientHealthCheckupDetailsScreenState
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child:
-                      _groupByDate ? Column(children: dayTiles) : usersListFlat,
+                      _bloc.groupByDate
+                          ? Column(children: dayTiles)
+                          : usersListFlat,
                 ),
               ],
               onExpansionChanged: (_) => _audioController.playerStop(),
@@ -271,20 +274,25 @@ class _PatientHealthCheckupDetailsScreenState
   }
 
   Widget _weeklyGroupingToggle() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Text("Group by date"),
-        Switch(
-          value: _groupByDate,
-          onChanged: (v) {
-            _audioController.playerStop();
-            setState(() {
-              _groupByDate = v;
-            });
-          },
-        ),
-      ],
+    return StreamBuilder<bool>(
+      stream: _bloc.groupByDateStream,
+      initialData: _bloc.groupByDate,
+      builder: (context, snapshot) {
+        final groupByDate = snapshot.data ?? true;
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text("Group by date"),
+            Switch(
+              value: groupByDate,
+              onChanged: (v) {
+                _audioController.playerStop();
+                _bloc.setGroupByDate(v);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -650,19 +658,20 @@ class _PatientHealthCheckupDetailsScreenState
     return SingleChildScrollView(child: Column(children: children));
   }
 
-  Widget _tabBarContentView(Map<String, List<dynamic>>? data) {
+  Widget _tabBarContentView(PatientCheckUpDataModel? data) {
+    print("${data?.data?.toJson()}  +++++++ daily data");
     return TabBarView(
       controller: _tabController,
       children: [
         // Content for Daily Tab
-        _dailyView(data?['filtered_days']?.cast<UserDailyDatum>()),
+        _dailyView(data?.data?.userDailyData),
         // Content for Weekly Tab
         Column(
           children: [
             _weeklyGroupingToggle(),
             Expanded(
               child: _monthlyAndWeeklyView(
-                data?['filtered_weeks']?.cast<UserLyDatum>(),
+              data?.data?.userWeeklyData,
                 MonthlyAndWeeklyType.week,
               ),
             ),
@@ -670,7 +679,7 @@ class _PatientHealthCheckupDetailsScreenState
         ),
         // Content for Monthly Tab
         _monthlyAndWeeklyView(
-          data?['filtered_months']?.cast<UserLyDatum>(),
+          data?.data?.userMonthlyData,
           MonthlyAndWeeklyType.month,
         ),
       ],
@@ -698,7 +707,7 @@ class _PatientHealthCheckupDetailsScreenState
           ),
         ],
       ),
-      body: StreamBuilder<Map<String, List<dynamic>>>(
+      body: StreamBuilder<PatientCheckUpDataModel>(
         stream: _bloc.patientDataStream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {

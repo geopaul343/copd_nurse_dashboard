@@ -1,4 +1,3 @@
-
 // added same day , same week and current month check in this logic
 
 import 'dart:async';
@@ -13,10 +12,24 @@ class DashboardBloc {
       StreamController<List<PatientUser>>();
   Stream<List<PatientUser>> get searchStream => _searchController.stream;
 
-  final StreamController<Map<String, List<dynamic>>> _patientDataController =
-      StreamController<Map<String, List<dynamic>>>();
-  Stream<Map<String, List<dynamic>>> get patientDataStream =>
+
+
+     final StreamController<PatientCheckUpDataModel> _patientDataController =
+    StreamController<PatientCheckUpDataModel>();
+
+    
+  Stream<PatientCheckUpDataModel> get patientDataStream =>
       _patientDataController.stream;
+
+   
+
+
+  // Group by date toggle for weekly view
+  final StreamController<bool> _groupByDateController =
+      StreamController<bool>();
+  Stream<bool> get groupByDateStream => _groupByDateController.stream;
+  bool _groupByDate = true;
+  bool get groupByDate => _groupByDate;
 
   // Helper method to check if two dates are the same day
   bool isSameDay(DateTime? a, DateTime b) {
@@ -62,7 +75,6 @@ class DashboardBloc {
     return start.add(const Duration(days: 6));
   }
 
-
   Future searchUser({required String name}) async {
     try {
       SearchResponse response = await _repo.searchUser(name: name);
@@ -81,8 +93,10 @@ class DashboardBloc {
       PatientCheckUpDataModel response = await _repo.fetchPatientCheckupData(
         patientId: patientId,
       );
-      final filteredData = _processData(response);
-      _patientDataController.add(filteredData);
+      final PatientCheckUpDataModel filteredData = _processDataNew(
+        response,
+      );
+      _patientDataController.add(filteredData );
     } catch (e) {
       _patientDataController.addError('Failed to fetch patient data: $e');
     }
@@ -92,88 +106,116 @@ class DashboardBloc {
     try {
       PatientCheckUpDataModel response =
           await _repo.fetchPatientCheckupDataById();
-      final filteredData = _processData(response);
+      // final filteredData = _processData(response);
+      print("ooooooooooooo");
+      final filteredData = _processDataNew(response);
+      print("qqqqq1133434324$filteredData");
       _patientDataController.add(filteredData);
+
+
+      
     } catch (e) {
       _patientDataController.addError('Failed to fetch patient data: $e');
     }
   }
 
-  Map<String, List<dynamic>> _processData(PatientCheckUpDataModel response) {
-    final Map<String, List<dynamic>> filteredData = {
-      'filtered_days': <UserDailyDatum>[],
-      'filtered_weeks': <UserLyDatum>[],
-      'filtered_months': <UserLyDatum>[],
-    };
-
-    // Process daily data: sort newest to oldest
-    if (response.data?.userDailyData != null) {
-      filteredData['filtered_days'] = List<UserDailyDatum>.from(
-        response.data!.userDailyData!,
-      )..sort((a, b) {
-        final da = a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
-        final db = b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
-        return db.compareTo(da);
-      });
-    }
-
-    // Process weekly data: group by week, sort newest to oldest
-    if (response.data?.userWeeklyData != null) {
-      final Map<DateTime, List<UserLyDatum>> weekStartToItems = {};
-      for (final item in response.data!.userWeeklyData!) {
-        if (item.createdAt == null) continue;
-        final DateTime weekStart = startOfWeek(item.createdAt!);
-        weekStartToItems.putIfAbsent(weekStart, () => []);
-        weekStartToItems[weekStart]!.add(item);
-      }
-
-      final List<DateTime> sortedWeekStarts =
-          weekStartToItems.keys.toList()..sort((a, b) => b.compareTo(a));
-
-      List<UserLyDatum> sortedWeeklyData = [];
-      for (final weekStart in sortedWeekStarts) {
-        final DateTime weekEnd = endOfWeek(weekStart);
-
-        // Count entries for this week
-        final entryCount = weekStartToItems[weekStart]!.length;
-
-        // Add week header
-        sortedWeeklyData.add(
-          UserLyDatum(
-            userId: null, // Marker for week header
-            userName:
-                "Week of ${DateConverter.isoStringToLocalDateOnly(weekStart)} - ${DateConverter.isoStringToLocalDateOnly(weekEnd)}",
-            createdAt: weekStart,
-            isWeeklySubmitted: entryCount.toString(), // Store entry count
-          ),
-        );
-
-        // Sort entries within the week (newest to oldest)
-        final List<UserLyDatum> items =
-            weekStartToItems[weekStart]!..sort((a, b) {
-              final da = a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
-              final db = b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
-              return db.compareTo(da);
-            });
-
-        sortedWeeklyData.addAll(items);
-      }
-      filteredData['filtered_weeks'] = sortedWeeklyData;
-    }
-
-    // Process monthly data: sort newest to oldest
-    if (response.data?.userMonthlyData != null) {
-      filteredData['filtered_months'] = List<UserLyDatum>.from(
-        response.data!.userMonthlyData!,
-      )..sort((a, b) {
-        final da = a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
-        final db = b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0);
-        return db.compareTo(da);
-      });
-    }
-
-    return filteredData;
+  // Set group by date value
+  void setGroupByDate(bool value) {
+    _groupByDate = value;
+    _groupByDateController.add(_groupByDate);
   }
+
+  // Update the method to return the data part directly
+  // PatientCheckUpDataModel _processDataNew(
+  //   PatientCheckUpDataModel response,
+  // ) {
+  //   PatientCheckUpDataModel patientCheckUpDatamodel = PatientCheckUpDataModel(
+  //     message: response.message,
+  //     data: PatientCheckUpDataModelData(
+  //       userDailyData: [],
+  //       userWeeklyData: [],
+  //       userMonthlyData: [],
+  //     ),
+  //   );
+
+  //   // Sort the data and return it directly
+  //   final data = response.data!;
+
+  //   // Sort user_daily_data by createdAt
+  //   if (data.userDailyData != null && data.userDailyData!.isNotEmpty) {
+  //     data.userDailyData!.sort(
+  //       (a, b) =>
+  //           (a.createdAt ?? DateTime(0)).compareTo(b.createdAt ?? DateTime(0)),
+  //     );
+  //   }
+
+  //   // Sort user_weekly_data by createdAt
+  //   if (data.userWeeklyData != null && data.userWeeklyData!.isNotEmpty) {
+  //     data.userWeeklyData!.sort(
+  //       (a, b) =>
+  //           (a.createdAt ?? DateTime(0)).compareTo(b.createdAt ?? DateTime(0)),
+  //     );
+  //   }
+
+  //   // Sort user_monthly_data by createdAt
+  //   if (data.userMonthlyData != null && data.userMonthlyData!.isNotEmpty) {
+  //     data.userMonthlyData!.sort(
+  //       (a, b) =>
+  //           (a.createdAt ?? DateTime(0)).compareTo(b.createdAt ?? DateTime(0)),
+  //     );
+  //   }
+
+  //   // return patientCheckUpDatamodel;
+
+  //    return patientCheckUpDatamodel;
+    
+  // }
+
+
+  PatientCheckUpDataModel _processDataNew(PatientCheckUpDataModel response) {
+  PatientCheckUpDataModel filteredData = PatientCheckUpDataModel(
+    message: response.message,
+    data: response.data != null
+        ? PatientCheckUpDataModelData(
+      userDailyData: [],
+      userWeeklyData: [],
+      userMonthlyData: [],
+    )
+        : null,
+  );
+
+  // Check if response.data is not null
+  if (response.data != null) {
+    // Sort user_daily_data by createdAt
+    if (response.data!.userDailyData != null && response.data!.userDailyData!.isNotEmpty) {
+      final sortedDailyData = List<UserDailyDatum>.from(response.data!.userDailyData!)
+        ..sort((a, b) => (a.createdAt ?? DateTime(0)).compareTo(b.createdAt ?? DateTime(0)));
+      filteredData.data!.userDailyData = sortedDailyData;
+    } else {
+      filteredData.data!.userDailyData = [];
+    }
+
+    // Sort user_weekly_data by createdAt
+    if (response.data!.userWeeklyData != null && response.data!.userWeeklyData!.isNotEmpty) {
+      final sortedWeeklyData = List<UserLyDatum>.from(response.data!.userWeeklyData!)
+        ..sort((a, b) => (a.createdAt ?? DateTime(0)).compareTo(b.createdAt ?? DateTime(0)));
+      filteredData.data!.userWeeklyData = sortedWeeklyData;
+    } else {
+      filteredData.data!.userWeeklyData = [];
+    }
+
+    // Sort user_monthly_data by createdAt
+    if (response.data!.userMonthlyData != null && response.data!.userMonthlyData!.isNotEmpty) {
+      final sortedMonthlyData = List<UserLyDatum>.from(response.data!.userMonthlyData!)
+        ..sort((a, b) => (a.createdAt ?? DateTime(0)).compareTo(b.createdAt ?? DateTime(0)));
+      filteredData.data!.userMonthlyData = sortedMonthlyData;
+    } else {
+      filteredData.data!.userMonthlyData = [];
+    }
+  }
+
+  return filteredData;
+}
 
   void dispose() {
     _searchController.close();
