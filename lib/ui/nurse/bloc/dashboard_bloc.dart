@@ -5,8 +5,11 @@ import 'package:admin_dashboard/app/helper/date_helper.dart';
 import 'package:admin_dashboard/data/nurse/model/nurse/patient_checkup_data_model.dart';
 import 'package:admin_dashboard/data/nurse/repository/dashboard/dashboard_repo_impl.dart';
 import 'package:admin_dashboard/data/nurse/model/nurse/search_user_model.dart';
+import 'package:intl/intl.dart';
 
 class DashboardBloc {
+
+
   final DashBoardRepoImpl _repo = DashBoardRepoImpl();
   final StreamController<List<PatientUser>> _searchController =
       StreamController<List<PatientUser>>();
@@ -37,43 +40,6 @@ class DashboardBloc {
     return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 
-  // Helper method to check if two dates are in the same week
-  bool isSameWeek(DateTime? a, DateTime? b) {
-    if (a == null || b == null) return false;
-    final weekStartA = DateTime(
-      a.year,
-      a.month,
-      a.day,
-    ).subtract(Duration(days: a.weekday - 1));
-    final weekStartB = DateTime(
-      b.year,
-      b.month,
-      b.day,
-    ).subtract(Duration(days: b.weekday - 1));
-    return weekStartA.year == weekStartB.year &&
-        weekStartA.month == weekStartB.month &&
-        weekStartA.day == weekStartB.day;
-  }
-
-  // Helper method to check if a date is in the current month
-  bool isInCurrentMonth(DateTime? date) {
-    if (date == null) return false;
-    final now = DateTime.now();
-    return date.year == now.year && date.month == now.month;
-  }
-
-  // Helper method to calculate the start of the week (Monday)
-  DateTime startOfWeek(DateTime date) {
-    final normalized = DateTime(date.year, date.month, date.day);
-    final int daysToSubtract = normalized.weekday - 1;
-    return normalized.subtract(Duration(days: daysToSubtract));
-  }
-
-  // Helper method to calculate the end of the week (Sunday)
-  DateTime endOfWeek(DateTime date) {
-    final start = startOfWeek(date);
-    return start.add(const Duration(days: 6));
-  }
 
   Future searchUser({required String name}) async {
     try {
@@ -106,13 +72,8 @@ class DashboardBloc {
     try {
       PatientCheckUpDataModel response =
           await _repo.fetchPatientCheckupDataById();
-      // final filteredData = _processData(response);
-      print("ooooooooooooo");
       final filteredData = _processDataNew(response);
-      print("qqqqq1133434324$filteredData");
       _patientDataController.add(filteredData);
-
-
       
     } catch (e) {
       _patientDataController.addError('Failed to fetch patient data: $e');
@@ -124,53 +85,6 @@ class DashboardBloc {
     _groupByDate = value;
     _groupByDateController.add(_groupByDate);
   }
-
-  // Update the method to return the data part directly
-  // PatientCheckUpDataModel _processDataNew(
-  //   PatientCheckUpDataModel response,
-  // ) {
-  //   PatientCheckUpDataModel patientCheckUpDatamodel = PatientCheckUpDataModel(
-  //     message: response.message,
-  //     data: PatientCheckUpDataModelData(
-  //       userDailyData: [],
-  //       userWeeklyData: [],
-  //       userMonthlyData: [],
-  //     ),
-  //   );
-
-  //   // Sort the data and return it directly
-  //   final data = response.data!;
-
-  //   // Sort user_daily_data by createdAt
-  //   if (data.userDailyData != null && data.userDailyData!.isNotEmpty) {
-  //     data.userDailyData!.sort(
-  //       (a, b) =>
-  //           (a.createdAt ?? DateTime(0)).compareTo(b.createdAt ?? DateTime(0)),
-  //     );
-  //   }
-
-  //   // Sort user_weekly_data by createdAt
-  //   if (data.userWeeklyData != null && data.userWeeklyData!.isNotEmpty) {
-  //     data.userWeeklyData!.sort(
-  //       (a, b) =>
-  //           (a.createdAt ?? DateTime(0)).compareTo(b.createdAt ?? DateTime(0)),
-  //     );
-  //   }
-
-  //   // Sort user_monthly_data by createdAt
-  //   if (data.userMonthlyData != null && data.userMonthlyData!.isNotEmpty) {
-  //     data.userMonthlyData!.sort(
-  //       (a, b) =>
-  //           (a.createdAt ?? DateTime(0)).compareTo(b.createdAt ?? DateTime(0)),
-  //     );
-  //   }
-
-  //   // return patientCheckUpDatamodel;
-
-  //    return patientCheckUpDatamodel;
-    
-  // }
-
 
   PatientCheckUpDataModel _processDataNew(PatientCheckUpDataModel response) {
   PatientCheckUpDataModel filteredData = PatientCheckUpDataModel(
@@ -216,6 +130,34 @@ class DashboardBloc {
 
   return filteredData;
 }
+
+// Function to get ISO week number
+  int getIsoWeekNumber(DateTime date) {
+    // Adjust to the ISO week date system (week starts on Monday)
+    DateTime adjustedDate = date.subtract(Duration(days: date.weekday - 1));
+    DateTime firstDayOfYear = DateTime(date.year, 1, 1);
+    int daysDifference = adjustedDate.difference(firstDayOfYear).inDays;
+    int weekNumber = ((daysDifference + firstDayOfYear.weekday + 6) / 7).floor() + 1;
+    // Handle edge case for week 53/1 crossover
+    if (date.month == 12 && weekNumber == 53) {
+      DateTime nextYearFirstDay = DateTime(date.year + 1, 1, 1);
+      if (nextYearFirstDay.weekday <= 4) {
+        return 1; // Belongs to week 1 of next year
+      }
+    }
+    if (date.month == 1 && weekNumber > 50) {
+      DateTime prevYearFirstDay = DateTime(date.year - 1, 1, 1);
+      if (prevYearFirstDay.weekday > 4) {
+        return weekNumber; // Belongs to last week of previous year
+      }
+    }
+    return weekNumber;
+  }
+
+  String formatDateTime(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+    return DateFormat('MMM dd, yyyy, hh:mm a').format(dateTime.toLocal());
+  }
 
   void dispose() {
     _searchController.close();
