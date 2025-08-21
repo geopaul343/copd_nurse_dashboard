@@ -27,57 +27,185 @@ class DailyViewWidget extends StatelessWidget {
   }
 
   Widget buildDailyContent(UserDailyDatum data) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 5),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("UserName: ${data.userName ?? "N/A"}"),
-          Text("Breathing: ${data.data?.breathing ?? "N/A"}"),
-          Text(
-            "DidShortWalk: ${data.data?.didShortWalk == true ? "Available" : "Not Available"}",
-          ),
-          Text(
-            "HasInhalerStock: ${data.data?.hasInhalerStock == true ? "Available" : "Not Available"}",
-          ),
-          Text("PhlegmChange: ${data.data?.phlegmChange ?? "N/A"}"),
-          Text("PhlegmColor: ${data.data?.phlegmColor ?? "N/A"}"),
-          Text("RelieverPuffs: ${data.data?.relieverPuffs ?? "N/A"}"),
-          Text("spo2: ${data.data?.spo2 ?? "N/A"}"),
-          Text(
-            "TookRegularInhaler: ${data.data?.tookRegularInhaler == true ? "Available" : "Not Available"}",
-          ),
-          Text(
-            "UsedOxygenAsPrescribed: ${data.data?.usedOxygenAsPrescribed == true ? "Available" : "Not Available"}",
-          ),
-          data.createdAt != null
-              ? Text(
-                "Date: ${DateConverter.isoStringToLocalDateOnly(data.createdAt!)}",
-              )
-              : SizedBox(),
-          if (data.data?.lungSoundRecordings != null ||
-              data.data?.lungSoundRecordings?.isNotEmpty == true) ...[
-            Text("Audios "),
+    return Card(
+      elevation: 3,
+      shadowColor: ColorName.shadowForAuthenticationContainer,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: ColorName.grey3, width: 1),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // --- Header ---
             Row(
-              children:
-                  data.data!.lungSoundRecordings!
-                      .map(
-                        (audio) => Padding(
-                          padding: const EdgeInsets.only(right: 5),
-                          child: AudioWidget(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  data.userName ?? "Unknown User",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                if (data.createdAt != null)
+                  Text(
+                    DateConverter.isoStringToLocalDateOnly(data.createdAt!),
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: ColorName.grey600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+              ],
+            ),
+            const Divider(
+              color: ColorName.grey3,
+              thickness: .5,
+            ),
+    
+            // --- Body Data ---
+            _buildInfoRow("Breathing", "${data.data?.breathing ?? "N/A"}"),
+            _buildInfoRow(
+              "Did Short Walk",
+              data.data?.didShortWalk == true ? "✅ Yes" : "❌ No",
+            ),
+            _buildInfoRow(
+              "Has Inhaler Stock",
+              data.data?.hasInhalerStock == true
+                  ? "✅ Available"
+                  : "❌ Not Available",
+            ),
+            _buildInfoRow(
+              "Phlegm Change",
+              "${data.data?.phlegmChange ?? "N/A"}",
+            ),
+            _buildInfoRow(
+              "Phlegm Color",
+              "${data.data?.phlegmColor ?? "N/A"}",
+            ),
+            _buildInfoRow(
+              "Reliever Puffs",
+              "${data.data?.relieverPuffs ?? "N/A"}",
+            ),
+            _buildInfoRow("SpO₂", "${data.data?.spo2 ?? "N/A"}"),
+            _buildInfoRow(
+              "Regular Inhaler",
+              data.data?.tookRegularInhaler == true ? "✅ Taken" : "❌ Missed",
+            ),
+            _buildInfoRow(
+              "Oxygen Prescribed",
+              data.data?.usedOxygenAsPrescribed == true
+                  ? "✅ Used"
+                  : "❌ Not Used",
+            ),
+    
+            // --- Audio Section ---
+            if (data.data?.lungSoundRecordings != null &&
+                data.data!.lungSoundRecordings!.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Text(
+                "Lung Sound Recordings",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: ColorName.textBlue1,
+                ),
+              ),
+           Gap(6),
+              Wrap(
+                spacing: 6,
+                children:
+                    data.data!.lungSoundRecordings!
+                        .map(
+                          (audio) => AudioWidget(
                             url: audio.fileUri ?? "",
                             controller: audioController,
                           ),
-                        ),
-                      )
-                      .toList(),
-            ),
+                        )
+                        .toList(),
+              ),
+            ],
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 3,
+            child: Text(
+              label,
+              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+            ),
+          ),
+          Expanded(
+            flex: 4,
+            child: Text(value, style: const TextStyle(fontSize: 14)),
+          ),
         ],
       ),
     );
   }
+
+  // Widget buildDailyContent(UserDailyDatum data) {
+  //   return Padding(
+  //     padding: const EdgeInsets.fromLTRB(10, 0, 10, 5),
+  //     child: Column(
+  //       mainAxisAlignment: MainAxisAlignment.start,
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Text("UserName: ${data.userName ?? "N/A"}"),
+  //         Text("Breathing: ${data.data?.breathing ?? "N/A"}"),
+  //         Text(
+  //           "DidShortWalk: ${data.data?.didShortWalk == true ? "Available" : "Not Available"}",
+  //         ),
+  //         Text(
+  //           "HasInhalerStock: ${data.data?.hasInhalerStock == true ? "Available" : "Not Available"}",
+  //         ),
+  //         Text("PhlegmChange: ${data.data?.phlegmChange ?? "N/A"}"),
+  //         Text("PhlegmColor: ${data.data?.phlegmColor ?? "N/A"}"),
+  //         Text("RelieverPuffs: ${data.data?.relieverPuffs ?? "N/A"}"),
+  //         Text("spo2: ${data.data?.spo2 ?? "N/A"}"),
+  //         Text(
+  //           "TookRegularInhaler: ${data.data?.tookRegularInhaler == true ? "Available" : "Not Available"}",
+  //         ),
+  //         Text(
+  //           "UsedOxygenAsPrescribed: ${data.data?.usedOxygenAsPrescribed == true ? "Available" : "Not Available"}",
+  //         ),
+  //         data.createdAt != null
+  //             ? Text(
+  //               "Date: ${DateConverter.isoStringToLocalDateOnly(data.createdAt!)}",
+  //             )
+  //             : SizedBox(),
+  //         if (data.data?.lungSoundRecordings != null ||
+  //             data.data?.lungSoundRecordings?.isNotEmpty == true) ...[
+  //           Text("Audios "),
+  //           Row(
+  //             children:
+  //                 data.data!.lungSoundRecordings!
+  //                     .map(
+  //                       (audio) => Padding(
+  //                         padding: const EdgeInsets.only(right: 5),
+  //                         child: AudioWidget(
+  //                           url: audio.fileUri ?? "",
+  //                           controller: audioController,
+  //                         ),
+  //                       ),
+  //                     )
+  //                     .toList(),
+  //           ),
+  //         ],
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _dailyView(List<UserDailyDatum>? userDailyData) {
     // Group entries by day
@@ -108,87 +236,42 @@ class DailyViewWidget extends StatelessWidget {
             String title =
                 '${DateFormat('MMMM dd, yyyy').format(date)} (${dayEntries.length} entries)';
 
-            return 
-            
-    //         Padding(
-    //           padding: const EdgeInsets.only(bottom: 5),
-    //           child: Container(decoration: BoxDecoration(
-    //   color: ColorName.white, // Background outside ExpansionTile
-    //   borderRadius: BorderRadius.circular(12),
-    //   border: Border.all(
-    //     color: ColorName.grey3, // border color
-    //  //   width: 1.2, // border thickness
-    //   ),
-    //   boxShadow: [
-    //     BoxShadow(
-    //       color: ColorName.white.withValues(alpha: 0.5), // shadow color
-    //      // blurRadius: 4,
-    //     //  offset: Offset(0, 2),
-    //     ),
-    //   ],
-    // ),
-    //             child: ExpansionTile(
-    //               backgroundColor: ColorName.primary.withValues(
-    //                 alpha: 0.4,
-    //               ), // Background color when expanded
-    //               collapsedBackgroundColor:
-    //                   ColorName.lightBackgroundColor, // soft blue highlight
-    //               // textColor: Colors.blue, // Text color when expanded
-    //               collapsedTextColor:
-    //                   ColorName.black, // Text color when collapsed
-    //               iconColor: ColorName.darkBackgroundColor.withValues(
-    //                 alpha: 0.2,
-    //               ), // Icon color when expanded
-    //               collapsedIconColor: ColorName.grey500,
-    //               title: Text(title),
-    //               subtitle: const Text('Tap to view Patient details'),
-                
-    //               children:
-    //                   dayEntries.map((entry) {
-    //                     return Container(
-    //                       color: ColorName.white, // soft blue highlight
-                
-    //                       child: buildDailyContent(entry),
-    //                     );
-    //                   }).toList(),
-    //             ),
-    //           ),
-    //         );
-
-
-           Padding(
-             padding: const EdgeInsets.only(bottom:5.0),
-             child: Container(
-               decoration: BoxDecoration(
-                 borderRadius: BorderRadius.circular(12),
-                 border: Border.all(
-                   color: ColorName.grey3,
-                   width: 1.2,
-                 ),
-               ),
-               child: ClipRRect(
-                 borderRadius: BorderRadius.circular(12),
-                 child: ExpansionTile(
-                   backgroundColor: ColorName.primary.withValues(alpha: 0.1),
-                   collapsedBackgroundColor: ColorName.lightBackgroundColor,
-                   collapsedTextColor: ColorName.black,
-                   iconColor: ColorName.darkBackgroundColor.withValues(alpha: 0.5),
-                   collapsedIconColor: ColorName.grey500,
-                   title: Text(title),
-                   subtitle: const Text('Tap to view Patient details'),
-                   children: dayEntries.map((entry) {
-                     return Container(
-                       color: ColorName.white,
-                       child: buildDailyContent(entry),
-                     );
-                   }).toList(),
-                 ),
-               ),
-             ),
-           );
-
-
-
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 5.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: ColorName.grey3, width: 1.2),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: ExpansionTileTheme(
+                    data: ExpansionTileThemeData(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      collapsedShape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      backgroundColor: ColorName.primary.withValues(alpha: 0.1),
+                      collapsedBackgroundColor: ColorName.lightBackgroundColor,
+                      iconColor: ColorName.primary,
+                      collapsedIconColor: ColorName.grey500,
+                      tilePadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      childrenPadding: const EdgeInsets.all(8),
+                    ),
+                    child: ExpansionTile(
+                      title: Text(title),
+                      subtitle: const Text('Tap to view Patient details'),
+                      children: dayEntries.map(buildDailyContent).toList(),
+                    ),
+                  ),
+                ),
+              ),
+            );
           },
         );
   }
