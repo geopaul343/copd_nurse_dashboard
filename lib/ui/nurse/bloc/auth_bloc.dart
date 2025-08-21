@@ -1,7 +1,4 @@
-
-
 import 'dart:convert';
-
 import 'package:admin_dashboard/app/app_constants.dart';
 import 'package:admin_dashboard/app/helper/shared_preference_helper.dart';
 import 'package:admin_dashboard/data/nurse/repository/auth/auth_repo_impl.dart';
@@ -13,20 +10,17 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
-
 import '../../../data/nurse/model/nurse/user_detail_model.dart';
-
 import '../screens/patient/patient_health_checkup_details_screen.dart';
 
-class AuthBloc{
+class AuthBloc {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final AuthRepoImpl repo = AuthRepoImpl();
 
   UserDetails? userDetails;
 
-  Future signInWithGoogle(BuildContext context,{required isFromAdmin}) async {
-
+  Future signInWithGoogle(BuildContext context, {required isFromAdmin}) async {
     try {
       // Check if Firebase is initialized
       if (Firebase.apps.isEmpty) {
@@ -41,7 +35,7 @@ class AuthBloc{
       }
 
       final GoogleSignInAuthentication googleAuth =
-      await googleUser.authentication;
+          await googleUser.authentication;
 
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
@@ -58,14 +52,25 @@ class AuthBloc{
           userEmail: userCredential.user?.email,
           userId: userCredential.user?.uid,
           userName: userCredential.user?.displayName,
-          userToken: idToken
+          userToken: idToken,
         );
-       String userJson = jsonEncode(userDetail.toJson());
+        String userJson = jsonEncode(userDetail.toJson());
         SharedPrefService.instance.setString(AppConstants.user, userJson);
-        SharedPrefService.instance.setString(AppConstants.accessToken, idToken??"");
-        SharedPrefService.instance.setString(AppConstants.userId, userCredential.user?.uid??"");
+        SharedPrefService.instance.setString(
+          AppConstants.accessToken,
+          idToken ?? "",
+        );
+        SharedPrefService.instance.setString(
+          AppConstants.userId,
+          userCredential.user?.uid ?? "",
+        );
         userDetails = await getUserDetails();
-        await callLogInApi(email: userCredential.user?.email??"", userId: userCredential.user?.uid??"", userName: userCredential.user?.displayName??"",isFromAdmin:isFromAdmin );
+        await callLogInApi(
+          email: userCredential.user?.email ?? "",
+          userId: userCredential.user?.uid ?? "",
+          userName: userCredential.user?.displayName ?? "",
+          isFromAdmin: isFromAdmin,
+        );
       } catch (apiError) {
         print('⚠️ Backend API call failed: $apiError');
         // Continue anyway - user is authenticated with Firebase
@@ -78,19 +83,34 @@ class AuthBloc{
     }
   }
 
-  Future callLogInApi({required String email, required String userId, required String userName,required bool isFromAdmin})async{
-   Response result = await repo.login(email: email, userId: userId, userName: userName);
-   if(result.statusCode == 201 || result.statusCode == 200){
-     if (isFromAdmin) {
-       Navigator.pushReplacementNamed(AppConstants.globalNavigatorKey.currentContext!, AdminHomescreen.path);
-     } else {
-      // Navigator.pushReplacementNamed(AppConstants.globalNavigatorKey.currentContext!, DashboardScreen.path);
-       Navigator.pushReplacementNamed(AppConstants.globalNavigatorKey.currentContext!, PatientHealthCheckupDetailsScreen.path,arguments: "dummy");
-     }
-   }else{
-     SnackBarCustom.failure("Login Failed try Again");
-   }
-
+  Future callLogInApi({
+    required String email,
+    required String userId,
+    required String userName,
+    required bool isFromAdmin,
+  }) async {
+    Response result = await repo.login(
+      email: email,
+      userId: userId,
+      userName: userName,
+    );
+    if (result.statusCode == 201 || result.statusCode == 200) {
+      if (isFromAdmin) {
+        Navigator.pushReplacementNamed(
+          AppConstants.globalNavigatorKey.currentContext!,
+          AdminHomescreen.path,
+        );
+      } else {
+        // Navigator.pushReplacementNamed(AppConstants.globalNavigatorKey.currentContext!, DashboardScreen.path);
+        Navigator.pushReplacementNamed(
+          AppConstants.globalNavigatorKey.currentContext!,
+          PatientHealthCheckupDetailsScreen.path,
+          arguments: "dummy",
+        );
+      }
+    } else {
+      SnackBarCustom.failure("Login Failed try Again");
+    }
   }
 
   // Function to retrieve UserDetails from SharedPreferences
@@ -118,7 +138,6 @@ class AuthBloc{
       print('No user details found in SharedPreferences');
     }
   }
-
 
   Future<void> clearUserDetails() async {
     // final prefs = await SharedPrefService.instance;

@@ -115,7 +115,7 @@ class _PatientHealthCheckupDetailsScreenState
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 children: [
                   Gap(20),

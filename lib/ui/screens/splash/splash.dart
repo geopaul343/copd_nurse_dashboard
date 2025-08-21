@@ -9,6 +9,7 @@ import 'package:admin_dashboard/ui/nurse/screens/patient/patient_health_checkup_
 import 'package:flutter/material.dart';
 import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 
 
@@ -42,7 +43,16 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorName.primary,
+      backgroundColor: ColorName.black,
+      body: SingleChildScrollView(
+        
+        child: Column(
+        children: [
+          Gap(400),
+          Center(child: Text("Laennec AI Admin dashboard"),)
+      ],
+    ),
+    ),
     );
   }
 }

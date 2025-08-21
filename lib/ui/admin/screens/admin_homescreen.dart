@@ -6,10 +6,6 @@ import 'package:admin_dashboard/ui/widgets/custom_exit.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-
-
-
-
 class AdminHomescreen extends StatefulWidget {
   static const String path = '/admin-homescreen';
   AdminHomescreen({super.key});

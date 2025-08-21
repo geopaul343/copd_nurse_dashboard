@@ -5,9 +5,6 @@ import '../../../data/nurse/model/admin/admin_patients_list_model.dart';
 import '../../../data/nurse/model/admin/nurse_list_model.dart';
 import '../bloc/admin_bloc.dart';
 import 'pateint_list_toadd_nurse_screen.dart'; // import
-
-
-
 class NurseDetailesScreen extends StatefulWidget {
   static const String path = '/nurse-details';
   final NursesList nurse;

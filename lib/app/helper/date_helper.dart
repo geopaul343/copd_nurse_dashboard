@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 
 extension DateConverter on DateTime {
   static String formatDate(DateTime dateTime) =>
@@ -31,9 +29,9 @@ extension DateConverter on DateTime {
   }
 
   static DateTime isoStringToLocalDate(String dateTime) {
-    return DateFormat('yyyy-MM-ddTHH:mm:ss.SSS')
-        .parse(dateTime, true)
-        .toLocal();
+    return DateFormat(
+      'yyyy-MM-ddTHH:mm:ss.SSS',
+    ).parse(dateTime, true).toLocal();
   }
 
   static String isoStringToLocalTimeOnly(String dateTime) {
@@ -62,24 +60,12 @@ extension DateConverter on DateTime {
 
   static String time(DateTime dateTime) =>
       DateFormat('hh:mm:ss aa', 'en-IN').format(dateTime);
-}
 
-extension TimeOfDayExt on TimeOfDay {
-  String get format12H {
-    final h = hour <= 12 ? hour : hour % 12;
-
-    final amPM = hour >= 12 ? 'PM' : 'AM';
-
-    String time = '$h:${minute < 10 ? '0$minute' : minute} $amPM';
-
-    return time;
-  }
-
-// String get jsonTimeString {
-//   return this.format12H;
-//   // return DateFormat('HH:mm:ss.SSS').format(this);
-//   // return MaterialLocalizations.of(context).formatTimeOfDay(timeOfDay)
-// }
+  // String get jsonTimeString {
+  //   return this.format12H;
+  //   // return DateFormat('HH:mm:ss.SSS').format(this);
+  //   // return MaterialLocalizations.of(context).formatTimeOfDay(timeOfDay)
+  // }
 }
 
 String formatHHMMSS(int seconds) {
@@ -98,9 +84,8 @@ String formatHHMMSS(int seconds) {
   return "$hoursStr:$minutesStr:$secondsStr";
 }
 
-class PhoneNumberFormat{
-
-  static String phoneFormat(String phoneNumber){
+class PhoneNumberFormat {
+  static String phoneFormat(String phoneNumber) {
     if (phoneNumber.length >= 10) {
       String areaCode = phoneNumber.substring(0, 3);
       String prefix = phoneNumber.substring(3, 6);
@@ -115,6 +100,5 @@ class PhoneNumberFormat{
     } else {
       return phoneNumber;
     }
-
   }
 }
