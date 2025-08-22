@@ -27,7 +27,7 @@ class AuthBloc {
         print('❌ Firebase not initialized');
         return;
       }
-
+      await _googleSignIn.signOut();
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
       if (googleUser == null) {
@@ -46,12 +46,14 @@ class AuthBloc {
         credential,
       );
 
+      print("PERFORMING NURSE SIGN IN");
+
       try {
         final idToken = await userCredential.user!.getIdToken();
         UserDetails userDetail = UserDetails(
           userEmail: userCredential.user?.email,
           userId: userCredential.user?.uid,
-          userName: userCredential.user?.displayName,
+          userName: "Nurse ${userCredential.user?.displayName}",
           userToken: idToken,
         );
         String userJson = jsonEncode(userDetail.toJson());
@@ -66,9 +68,9 @@ class AuthBloc {
         );
         userDetails = await getUserDetails();
         await callLogInApi(
-          email: userCredential.user?.email ?? "",
-          userId: userCredential.user?.uid ?? "",
-          userName: userCredential.user?.displayName ?? "",
+          email: userDetail.userEmail ?? "",
+          userId: userDetail.userId ?? "",
+          userName: userDetail.userName ?? "",
           isFromAdmin: isFromAdmin,
         );
       } catch (apiError) {
