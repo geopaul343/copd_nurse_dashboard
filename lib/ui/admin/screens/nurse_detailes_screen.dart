@@ -170,7 +170,7 @@ class _NurseDetailesScreenState extends State<NurseDetailesScreen> {
               final result = await Navigator.pushNamed(
                 context,
                 PatientListToAddNurseScreen.path,
-                arguments: widget.nurse.userId ?? "",
+                arguments: widget.nurse,
               );
               if (result == true) {
                 callApi();

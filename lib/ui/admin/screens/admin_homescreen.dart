@@ -87,7 +87,7 @@ class _AdminHomescreenState extends State<AdminHomescreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 20),
+                  Gap(20),
                     // Name & ID
                     Expanded(
                       child: Column(

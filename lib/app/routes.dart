@@ -74,10 +74,10 @@ class Routes {
         return pageRoute(settings, NurseDetailesScreen(nurse: nurse));
 
       case PatientListToAddNurseScreen.path:
-        String nurseId = settings.arguments as String;
+        NursesList nurseId = settings.arguments as NursesList;
         return pageRoute(
           settings,
-          PatientListToAddNurseScreen(nurseId: nurseId),
+          PatientListToAddNurseScreen(nurseItem: nurseId),
         );
 
       case DashboardScreen.path:

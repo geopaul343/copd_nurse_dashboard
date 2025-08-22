@@ -1,13 +1,16 @@
 import 'package:admin_dashboard/data/nurse/model/admin/admin_patients_list_model.dart';
+import 'package:admin_dashboard/data/nurse/model/admin/nurse_list_model.dart';
 import 'package:admin_dashboard/data/nurse/network/url.dart';
 import 'package:admin_dashboard/gen/colors.gen.dart';
+import 'package:admin_dashboard/ui/widgets/custom_confirmation_box.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import '../bloc/admin_bloc.dart';
 
 class PatientListToAddNurseScreen extends StatefulWidget {
   static const String path = '/patient-list-to-add-nurse';
-  final String? nurseId;
-  const PatientListToAddNurseScreen({super.key, this.nurseId});
+  final NursesList? nurseItem;
+  const PatientListToAddNurseScreen({super.key, this.nurseItem});
 
   @override
   State<PatientListToAddNurseScreen> createState() =>
@@ -27,6 +30,7 @@ class _PatientListToAddNurseScreenState
   }
 
   callApi() async {
+    await _bloc.getAllNurses();
     await _bloc.getAllPatients();
   }
 
@@ -179,24 +183,37 @@ class _PatientListToAddNurseScreenState
                                       color: ColorName.grey600,
                                     ),
                                   ),
+
                                   // Text(
                                   //   'User ID: ${patient?.userId ?? "N/A"}',
                                   //   style: TextStyle(fontSize: 14, color: ColorName.grey600),
                                   // ),
+                                  Gap(7),
                                   Text(
-                                    patient?.isSelect == false
-                                        ? 'Patient is assigned'
-                                        : 'Patient is not assigned',
+                                    patient?.nurseId == widget.nurseItem?.userId
+                                        ? "Already assigned to ${widget.nurseItem?.userName}"
+                                        : 'Patient is currently assigned to: ${_bloc.nurseIdToNameMap[patient?.nurseId]}',
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: ColorName.grey600,
                                     ),
                                   ),
+
+                                  // Text(
+
+                                  //   patient?.isSelect == false
+                                  //       ? 'Patient is assigned '
+                                  //       : 'Patient is not assigned',
+                                  //   style: TextStyle(
+                                  //     fontSize: 14,
+                                  //     color: ColorName.grey600,
+                                  //   ),
+                                  // ),
                                 ],
                               ),
 
                               trailing:
-                                  patient?.nurseId == null
+                                  patient?.nurseId != widget.nurseItem?.userId
                                       ? Checkbox(
                                         value: patient?.isSelect,
                                         activeColor:
@@ -237,62 +254,97 @@ class _PatientListToAddNurseScreenState
                     )
                     .map((patient) => patient.userId!)
                     .toList();
-            if (_bloc.isSetPatientToNurse(userIds: selectedUsers)) {
-              isLoading = true;
-              setState(() {});
-              await _bloc.setPatientToNurse(
-                nurseId: widget.nurseId ?? "",
-                userIds: selectedUsers,
+
+            if (selectedUsers.isEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Please select at least one patient"),
+                ),
               );
-              isLoading = false;
-              setState(() {});
+              return;
+            }
+            //   if (_bloc.isSetPatientToNurse(userIds: selectedUsers)) {
+            //     isLoading = true;
+            //     setState(() {});
+            //     await _bloc.setPatientToNurse(
+            //       nurseId: widget.nurseItem?.userId ?? "",
+            //       userIds: selectedUsers,
+            //     );
+            //     isLoading = false;
+            //     setState(() {});
+            //   }
+            // },
+
+            // 👇 Call confirmation box here
+            final bool? confirmed = await customConfirmationBox(
+              context: context,
+              title: "Reassign Patients",
+              message:
+                  "The selected patients will be unassigned from their current nurses and reassigned to ${widget.nurseItem?.userName}. Do you want to proceed?",
+              cancelText: "Cancel",
+              confirmText: "Yes, Reassign",
+            );
+
+            if (confirmed == true) {
+              if (_bloc.isSetPatientToNurse(userIds: selectedUsers)) {
+                setState(() => isLoading = true);
+
+                await _bloc.setPatientToNurse(
+                  nurseId: widget.nurseItem?.userId ?? "",
+                  userIds: selectedUsers,
+                );
+                setState(() => isLoading = false);
+              }
             }
           },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            height: 56,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  ColorName.primary, // #983AFD
-                  ColorName.primary.withOpacity(0.8), // #983AFD
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: ColorName.black.withValues(alpha: 0.15), // #000000
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom:   8.0),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              height: 56,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    ColorName.primary, // #983AFD
+                    ColorName.primary.withOpacity(0.8), // #983AFD
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
                 ),
-              ],
-            ),
-            child:
-                isLoading
-                    ? const Center(
-                      child: CircularProgressIndicator(
-                        color: ColorName.white, // #FFFFFF
-                        strokeWidth: 4,
-                      ),
-                    )
-                    : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Add Selected Patients (${_bloc.patientListByNurseId.where((test) => test.isSelect ?? false).length})",
-                          style: const TextStyle(
-                            color: ColorName.white, // #FFFFFF
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.5,
-                          ),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: ColorName.black.withValues(alpha: 0.15), // #000000
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child:
+                  isLoading
+                      ? const Center(
+                        child: CircularProgressIndicator(
+                          color: ColorName.white, // #FFFFFF
+                          strokeWidth: 4,
                         ),
-                      ],
-                    ),
+                      )
+                      : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Add Selected Patients (${_bloc.patientListByNurseId.where((test) => test.isSelect ?? false).length})",
+                            style: const TextStyle(
+                              color: ColorName.white, // #FFFFFF
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ],
+                      ),
+            ),
           ),
         ),
       ),
