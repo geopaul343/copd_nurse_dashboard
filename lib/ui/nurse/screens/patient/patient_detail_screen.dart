@@ -1,4 +1,3 @@
-
 import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:admin_dashboard/ui/nurse/screens/patient/patient_health_checkup_details_screen.dart';
 
@@ -6,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../data/nurse/model/nurse/search_user_model.dart';
-
 
 class PatientDetailScreen extends StatefulWidget {
   static const String path = '/patients-detail';
@@ -18,7 +16,6 @@ class PatientDetailScreen extends StatefulWidget {
 }
 
 class _PatientDetailScreenState extends State<PatientDetailScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -44,10 +41,11 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     Navigator.pop(context);
                   },
-                  child: Icon(Icons.arrow_back_ios)),
+                  child: Icon(Icons.arrow_back_ios),
+                ),
                 Gap(MediaQuery.of(context).size.width / 3.5),
                 Container(
                   width: 80,
@@ -63,11 +61,15 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
                       ),
                     ],
                   ),
-                  child: Icon(Icons.person, size: 40, color: Colors.blue.shade700),
+                  child: Icon(
+                    Icons.person,
+                    size: 40,
+                    color: Colors.blue.shade700,
+                  ),
                 ),
               ],
             ),
-      Gap(16),
+            Gap(16),
 
             // Patient Name
             Text(
@@ -106,7 +108,9 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
                   ),
                 ),
                 child: Text(
-                  widget.userDetail.isUserActive! ? 'Active Patient' : 'Inactive',
+                  widget.userDetail.isUserActive!
+                      ? 'Active Patient'
+                      : 'Inactive',
                   style: TextStyle(
                     fontSize: 12,
                     color:
@@ -123,9 +127,7 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
     );
   }
 
-
-
-//
+  //
   Widget _buildQuickStatsSection() {
     return Padding(
       padding: const EdgeInsets.all(24.0),
@@ -143,34 +145,39 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
           SizedBox(height: 16),
           Row(
             children: [
-              widget.userDetail.hospitalAdmissionsLast12m == null ? SizedBox():   Expanded(
-                child: _buildStatCard(
-                  'Hospital Admissions',
-                  '${widget.userDetail.hospitalAdmissionsLast12m ?? 0}',
-                  'Last 12 months',
-                  Icons.local_hospital,
-                  Colors.red.shade100,
-                  Colors.red.shade700,
-                ),
-              ),
+              widget.userDetail.hospitalAdmissionsLast12m == null
+                  ? SizedBox()
+                  : Expanded(
+                    child: _buildStatCard(
+                      'Hospital Admissions',
+                      '${widget.userDetail.hospitalAdmissionsLast12m ?? 0}',
+                      'Last 12 months',
+                      Icons.local_hospital,
+                      Colors.red.shade100,
+                      Colors.red.shade700,
+                    ),
+                  ),
               SizedBox(width: 12),
-              widget.userDetail.copdDiagnosed ==  null? SizedBox(): Expanded(
-                child: _buildStatCard(
-                  'COPD Stage',
-                  "${widget.userDetail.copdDiagnosed?["copdStage"] ?? "N/A"}",
-                  'Current Stage',
-                  Icons.medical_services,
-                  Colors.orange.shade100,
-                  Colors.orange.shade700,
-                ),
-              ),
+              widget.userDetail.copdDiagnosed == null
+                  ? SizedBox()
+                  : Expanded(
+                    child: _buildStatCard(
+                      'COPD Stage',
+                      "${widget.userDetail.copdDiagnosed?["copdStage"] ?? "N/A"}",
+                      'Current Stage',
+                      Icons.medical_services,
+                      Colors.orange.shade100,
+                      Colors.orange.shade700,
+                    ),
+                  ),
             ],
           ),
         ],
       ),
     );
   }
-//
+
+  //
   Widget _buildStatCard(
     String title,
     String value,
@@ -226,28 +233,46 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
   Widget _buildPatientDemographicsSection() {
     return _buildSection('Patient Demographics', Icons.person, [
       if (widget.userDetail.dateOfBirth != null)
-        _buildInfoRow('Date of Birth', widget.userDetail.dateOfBirth??"N/A"),
+        _buildInfoRow('Date of Birth', widget.userDetail.dateOfBirth ?? "N/A"),
       if (widget.userDetail.gender != null)
-        _buildInfoRow('Gender', widget.userDetail.gender??"N/A"),
+        _buildInfoRow('Gender', widget.userDetail.gender ?? "N/A"),
       if (widget.userDetail.email != null)
-        _buildInfoRow('Email', widget.userDetail.email??"N/A"),
+        _buildInfoRow('Email', widget.userDetail.email ?? "N/A"),
       if (widget.userDetail.phone != null)
-        _buildInfoRow('Phone', widget.userDetail.phone??"N/A"),
+        _buildInfoRow('Phone', widget.userDetail.phone ?? "N/A"),
       if (widget.userDetail.address != null)
-        _buildInfoRow('Address', widget.userDetail.address??"N/A"),
+        _buildInfoRow('Address', widget.userDetail.address ?? "N/A"),
     ]);
   }
-//
+
+  //
   Widget _buildCOPDAssessmentSection() {
     List<Widget> assessmentItems = [];
     if (widget.userDetail.copdDiagnosed != null) {
-      assessmentItems.add(_buildInfoRow('COPD Diagnosed', widget.userDetail.copdDiagnosed?["hasCOPD"].toString()??"N/A"));
+      assessmentItems.add(
+        _buildInfoRow(
+          'COPD Diagnosed',
+          widget.userDetail.copdDiagnosed?["hasCOPD"].toString() ?? "N/A",
+        ),
+      );
     }
     if (widget.userDetail.copdDiagnosed?["copdStage"] != null) {
-      assessmentItems.add(_buildInfoRow('COPD Stage', widget.userDetail.copdDiagnosed?["copdStage"]));
+      assessmentItems.add(
+        _buildInfoRow(
+          'COPD Stage',
+          widget.userDetail.copdDiagnosed?["copdStage"],
+        ),
+      );
     }
     if (widget.userDetail.copdActionPlan?['hasCOPDActionPlan'] != null) {
-      assessmentItems.add(_buildInfoRow('Action Plan', widget.userDetail.copdActionPlan?['hasCOPDActionPlan'] == true ? "Available" : "Not Available"));
+      assessmentItems.add(
+        _buildInfoRow(
+          'Action Plan',
+          widget.userDetail.copdActionPlan?['hasCOPDActionPlan'] == true
+              ? "Available"
+              : "Not Available",
+        ),
+      );
     }
 
     if (assessmentItems.isEmpty) {
@@ -261,13 +286,14 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
     );
   }
 
-
-//
+  //
   Widget _buildMedicalEquipmentSection() {
     List<Widget> equipmentItems = [];
 
     if (widget.userDetail.doYouHavePulseOximeter != null) {
-      equipmentItems.add(_buildInfoRow('Pulse Oximeter', _getPulseOximeterStatus()));
+      equipmentItems.add(
+        _buildInfoRow('Pulse Oximeter', _getPulseOximeterStatus()),
+      );
     }
 
     if (widget.userDetail.homeOxygenEnabled != null) {
@@ -293,17 +319,24 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
       equipmentItems,
     );
   }
-//
+
+  //
   Widget _buildMedicationsSection() {
     List<Widget> medicationItems = [];
-
 
     if (widget.userDetail.inhalerType != null) {
       medicationItems.add(_buildInfoRow('Inhaler Type', _getInhalerInfo()));
     }
 
     if (widget.userDetail.rescuepackAtHome != null) {
-      medicationItems.add(_buildInfoRow('Rescue Pack', widget.userDetail.rescuepackAtHome?['hasRescuePack']??false == true ? 'Available' : 'Not available'));
+      medicationItems.add(
+        _buildInfoRow(
+          'Rescue Pack',
+          widget.userDetail.rescuepackAtHome?['hasRescuePack'] ?? false == true
+              ? 'Available'
+              : 'Not available',
+        ),
+      );
     }
 
     if (widget.userDetail.anyRecommends != null) {
@@ -322,9 +355,10 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
       medicationItems,
     );
   }
-//
+
+  //
   Widget _buildEmergencySection() {
-    if (widget.userDetail.emergencyContactName == null ) {
+    if (widget.userDetail.emergencyContactName == null) {
       return SizedBox.shrink();
     }
 
@@ -332,7 +366,8 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
       _buildInfoRow('Emergency Contact', _getEmergencyContact()),
     ]);
   }
-//
+
+  //
   Widget _buildVaccinationSection() {
     if (widget.userDetail.fluVaccinated == null) {
       return SizedBox.shrink();
@@ -342,7 +377,8 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
       _buildInfoRow('Flu Vaccination', _getVaccinationStatus()),
     ]);
   }
-//
+
+  //
   Widget _buildLifestyleSection() {
     List<Widget> lifestyleItems = [];
 
@@ -351,7 +387,9 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
     }
 
     if (widget.userDetail.otherCondition != null) {
-      lifestyleItems.add(_buildInfoRow('Other Conditions', _getOtherConditions()));
+      lifestyleItems.add(
+        _buildInfoRow('Other Conditions', _getOtherConditions()),
+      );
     }
 
     if (lifestyleItems.isEmpty) {
@@ -364,7 +402,8 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
       lifestyleItems,
     );
   }
-//
+
+  //
   Widget _buildSection(String title, IconData icon, List<Widget> children) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
@@ -436,114 +475,131 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> {
     );
   }
 
-  String _getPulseOximeterStatus(){
-       final hasOximeter = widget.userDetail.doYouHavePulseOximeter?['ownsPulseOximeter'] ?? false == true;
-        final lastLevel = widget.userDetail.doYouHavePulseOximeter?['lastOxygenLevel']??"N/A";
-        return hasOximeter ? 'Yes (Last reading: $lastLevel%)' : 'No';
+  String _getPulseOximeterStatus() {
+    final hasOximeter =
+        widget.userDetail.doYouHavePulseOximeter?['ownsPulseOximeter'] ??
+        false == true;
+    final lastLevel =
+        widget.userDetail.doYouHavePulseOximeter?['lastOxygenLevel'] ?? "N/A";
+    return hasOximeter ? 'Yes (Last reading: $lastLevel%)' : 'No';
   }
 
   String _getHomeOxygenStatus() {
-      final hasOxygen = widget.userDetail.homeOxygenEnabled?['hasHomeOxygen']??false == true;
-        if (hasOxygen) {
-          final liters = widget.userDetail
-              .homeOxygenEnabled?['oxygenLitresPerMinute'];
-          final hours = widget.userDetail
-              .homeOxygenEnabled?['oxygenHoursPerDay'];
-          return 'Yes (${liters}L/min, ${hours}hrs/day)';
-        }else{
-          return "N/A";
-        }
+    final hasOxygen =
+        widget.userDetail.homeOxygenEnabled?['hasHomeOxygen'] ?? false == true;
+    if (hasOxygen) {
+      final liters =
+          widget.userDetail.homeOxygenEnabled?['oxygenLitresPerMinute'];
+      final hours = widget.userDetail.homeOxygenEnabled?['oxygenHoursPerDay'];
+      return 'Yes (${liters}L/min, ${hours}hrs/day)';
+    } else {
+      return "N/A";
+    }
   }
 
   String _getInhalerInfo() {
     final inhalers = widget.userDetail.inhalerType?['inhalers'] as List?;
-            if (inhalers != null && inhalers.isNotEmpty) {
-          final inhaler = inhalers.first;
-          return '${inhaler['name']} (${inhaler['dosage']})';
-        }else{
-              return "N/A";
-            }
+    if (inhalers != null && inhalers.isNotEmpty) {
+      final inhaler = inhalers.first;
+      return '${inhaler['name']} (${inhaler['dosage']})';
+    } else {
+      return "N/A";
+    }
   }
 
   String _getEmergencyContact() {
-            final name = widget.userDetail.emergencyContactName?['emergencyContactName']??"N/A";
-        final phone = widget.userDetail.emergencyContactName?['emergencyContactPhone']??"N/A";
-        return '$name ($phone)';
-
+    final name =
+        widget.userDetail.emergencyContactName?['emergencyContactName'] ??
+        "N/A";
+    final phone =
+        widget.userDetail.emergencyContactName?['emergencyContactPhone'] ??
+        "N/A";
+    return '$name ($phone)';
   }
 
   String _getVaccinationStatus() {
-            final vaccinations = widget.userDetail.fluVaccinated?['vaccinations'] as List?;
-        if (vaccinations != null && vaccinations.isNotEmpty) {
-          return vaccinations.join(', ');
-        }else{
-          return "N/A";
-        }
+    final vaccinations =
+        widget.userDetail.fluVaccinated?['vaccinations'] as List?;
+    if (vaccinations != null && vaccinations.isNotEmpty) {
+      return vaccinations.join(', ');
+    } else {
+      return "N/A";
+    }
   }
 
   String _getSmokingStatus() {
-        final status = widget.userDetail.smokingStatus?['smokingStatus'];
-        final cigarettes = widget.userDetail.smokingStatus?['cigarettesPerDay'];
-        final years = widget.userDetail.smokingStatus?['smokingYears'];
-        return '$status ($cigarettes cigs/day, $years years)';
+    final status = widget.userDetail.smokingStatus?['smokingStatus'];
+    final cigarettes = widget.userDetail.smokingStatus?['cigarettesPerDay'];
+    final years = widget.userDetail.smokingStatus?['smokingYears'];
+    return '$status ($cigarettes cigs/day, $years years)';
   }
 
   String _getOtherConditions() {
-            final conditions = widget.userDetail.otherCondition?['otherConditions'] as List?;
-        final text = widget.userDetail.otherCondition?['otherConditionText'];
-        if (conditions != null && conditions.isNotEmpty) {
-          return '${conditions.join(', ')}${text != null ? ' - $text' : ''}';
-        }else{
-          return "N/A";
-        }
+    final conditions =
+        widget.userDetail.otherCondition?['otherConditions'] as List?;
+    final text = widget.userDetail.otherCondition?['otherConditionText'];
+    if (conditions != null && conditions.isNotEmpty) {
+      return '${conditions.join(', ')}${text != null ? ' - $text' : ''}';
+    } else {
+      return "N/A";
+    }
   }
 
-  Widget _checkHealthCheckData(){
+  Widget _checkHealthCheckData() {
     return GestureDetector(
-      onTap: (){
-        Navigator.pushNamed(context, PatientHealthCheckupDetailsScreen.path,arguments: widget.userDetail.id);
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          PatientHealthCheckupDetailsScreen.path,
+          arguments: widget.userDetail.id,
+        );
       },
-      child: Center(child: Container(
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: ColorName.primary.withValues(alpha: 0.7)
+      child: Center(
+        child: Container(
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: ColorName.primary.withValues(alpha: 0.7),
+          ),
+          child: Text("check patient health data"),
         ),
-        child: Text("check patient health data"),
-      )),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    body:  SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             // Professional Header Section
-           _buildProfessionalHeader(),
-             Gap(20),
-             _checkHealthCheckData(),
-             // Quick Stats Cards
-            widget.userDetail.hospitalAdmissionsLast12m != null || widget.userDetail.copdDiagnosed !=  null ?_buildQuickStatsSection() : SizedBox(),
-             // Patient Demographics
+            _buildProfessionalHeader(),
+            Gap(20),
+            _checkHealthCheckData(),
+            // Quick Stats Cards
+            widget.userDetail.hospitalAdmissionsLast12m != null ||
+                    widget.userDetail.copdDiagnosed != null
+                ? _buildQuickStatsSection()
+                : SizedBox(),
+            // Patient Demographics
             _buildPatientDemographicsSection(),
             // COPD Assessment
-             _buildCOPDAssessmentSection(),
+            _buildCOPDAssessmentSection(),
             // Medical Equipment & Monitoring
             _buildMedicalEquipmentSection(),
             // Medications & Treatment
-           _buildMedicationsSection(),
+            _buildMedicationsSection(),
             // Emergency Information
             _buildEmergencySection(),
             // // Vaccination & Prevention
-          _buildVaccinationSection(),
+            _buildVaccinationSection(),
             // Lifestyle & Risk Factors
             _buildLifestyleSection(),
             SizedBox(height: 20),
           ],
         ),
-      )
-      );
+      ),
+    );
   }
 }

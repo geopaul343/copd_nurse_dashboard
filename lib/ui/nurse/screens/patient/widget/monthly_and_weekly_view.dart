@@ -1,3 +1,4 @@
+import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -5,7 +6,6 @@ import '../../../../../data/nurse/model/nurse/patient_checkup_data_model.dart';
 import '../../../bloc/dashboard_bloc.dart';
 
 enum MonthlyAndWeeklyType { week, month }
-
 
 class MonthlyAndWeeklyViewWidget extends StatelessWidget {
   final List<UserLyDatum>? userMonthlyData;
@@ -24,47 +24,45 @@ class MonthlyAndWeeklyViewWidget extends StatelessWidget {
   }
 
   Widget _monthlyAndWeeklyView(
-      List<UserLyDatum>? userMonthlyData,
-      MonthlyAndWeeklyType type,
-      ) {
-    // Group entries by week or month based on type
+    List<UserLyDatum>? userMonthlyData,
+    MonthlyAndWeeklyType type,
+  ) {
+    // Group entries by week or month
     Map<String, List<UserLyDatum>> entriesByPeriod = {};
     for (var entry in userMonthlyData ?? []) {
       DateTime createdAt = DateTime.parse(entry.createdAt.toString());
       String periodKey;
 
       if (type == MonthlyAndWeeklyType.week) {
-        // Weekly grouping (same as your original code)
         int weekNumber = _bloc.getIsoWeekNumber(createdAt);
         periodKey = '${createdAt.year}-W$weekNumber';
       } else {
-        // Monthly grouping
         periodKey = '${createdAt.year}-M${createdAt.month.toString().padLeft(2, '0')}';
       }
 
-      if (!entriesByPeriod.containsKey(periodKey)) {
-        entriesByPeriod[periodKey] = [];
-      }
+      entriesByPeriod.putIfAbsent(periodKey, () => []);
       entriesByPeriod[periodKey]!.add(entry);
     }
 
-    // Sort periods in descending order (most recent first)
-    var sortedPeriods = entriesByPeriod.keys.toList()..sort((a, b) => b.compareTo(a));
+    // Sort periods (most recent first)
+    var sortedPeriods = entriesByPeriod.keys.toList()
+      ..sort((a, b) => b.compareTo(a));
 
-    return userMonthlyData == null || userMonthlyData.isEmpty
-        ? const Center(child: Text("No Details Found!"))
-        : ListView.builder(
+    if (userMonthlyData == null || userMonthlyData.isEmpty) {
+      return const Center(child: Text("No Details Found!"));
+    }
+
+    return ListView.builder(
       itemCount: sortedPeriods.length,
       itemBuilder: (context, index) {
         String periodKey = sortedPeriods[index];
         List<UserLyDatum> periodEntries = entriesByPeriod[periodKey]!;
 
-        // Format title based on type
+        // Title
         String title;
         if (type == MonthlyAndWeeklyType.week) {
           title = 'Week $periodKey (${periodEntries.length} entries)';
         } else {
-          // Convert M08 to August, etc.
           final yearMonth = periodKey.split('-M');
           final year = yearMonth[0];
           final monthNum = int.parse(yearMonth[1]);
@@ -72,23 +70,47 @@ class MonthlyAndWeeklyViewWidget extends StatelessWidget {
           title = '$monthName $year (${periodEntries.length} entries)';
         }
 
-        return ExpansionTile(
-          title: Text(title),
-          subtitle: const Text('Tap to view details'),
-          children: periodEntries.map((entry) {
-            return ListTile(
-              title: Text('User: ${entry.userName}'),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Date: ${_bloc.formatDateTime(entry.createdAt.toString())}'),
-                  Text('Grade: ${entry.grade}'),
-                  Text('Submitted: ${entry.isWeeklySubmitted}'), // Fixed to use isWeeklySubmitted
-                  Text('User ID: ${entry.userId}'), // Fixed to use userId
-                ],
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: ExpansionTileTheme(
+            data: ExpansionTileThemeData(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
               ),
-            );
-          }).toList(),
+              collapsedShape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              backgroundColor: ColorName.primary.withValues(alpha: 0.1),
+              collapsedBackgroundColor: ColorName.lightBackgroundColor,
+              iconColor: ColorName.primary,
+              collapsedIconColor: ColorName.grey500,
+              tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              childrenPadding: const EdgeInsets.all(8),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric( vertical:  5.0),
+              child: ExpansionTile(
+                title: Text(title),
+                subtitle: const Text('Tap to view Patient details'),
+                children: periodEntries.map((entry) {
+                  return Card(
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    child: ListTile(
+                      title: Text('Date: ${_bloc.formatDateTime(entry.createdAt.toString())}'),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Grade: ${entry.grade}'),
+                          Text('Submitted: ${entry.isWeeklySubmitted}'),
+                          Text('User ID: ${entry.userId}'),
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
         );
       },
     );
