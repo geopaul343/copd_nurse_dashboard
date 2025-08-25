@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:gap/gap.dart';
 
-
-
 class AdminLoginScreen extends StatefulWidget {
   static const String path = '/admin-login';
   const AdminLoginScreen({super.key});
@@ -104,9 +102,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
         setState(() {});
         await _bloc.signInWithGoogle(context, isFromAdmin: true);
         isLoading = false;
-        setState(() {
-
-        });
+        setState(() {});
       },
       child: Container(
         width: double.infinity,

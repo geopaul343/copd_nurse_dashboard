@@ -3,6 +3,7 @@ import 'package:admin_dashboard/data/nurse/model/admin/nurse_list_model.dart';
 import 'package:admin_dashboard/data/nurse/network/url.dart';
 import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:admin_dashboard/ui/widgets/custom_confirmation_box.dart';
+import 'package:admin_dashboard/ui/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import '../bloc/admin_bloc.dart';
@@ -256,11 +257,7 @@ class _PatientListToAddNurseScreenState
                     .toList();
 
             if (selectedUsers.isEmpty) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Please select at least one patient"),
-                ),
-              );
+              SnackBarCustom.failure("Please select at least one patient");
               return;
             }
             //   if (_bloc.isSetPatientToNurse(userIds: selectedUsers)) {
@@ -298,7 +295,7 @@ class _PatientListToAddNurseScreenState
             }
           },
           child: Padding(
-            padding: const EdgeInsets.only(bottom:   8.0),
+            padding: const EdgeInsets.only(bottom: 8.0),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               height: 56,
