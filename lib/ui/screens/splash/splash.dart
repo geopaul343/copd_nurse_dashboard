@@ -71,7 +71,7 @@ class _SplashScreenState extends State<SplashScreen>
     _startAnimations();
 
     // Navigate after delay
-    Future.delayed(const Duration(seconds: 80), () {
+    Future.delayed(const Duration(seconds: 3), () {
       _navigateToNextScreen();
     });
   }
@@ -168,9 +168,7 @@ class _SplashScreenState extends State<SplashScreen>
                     },
                   ),
                 ),
-
                 const Gap(40),
-
                 // App name with slide animation
                 SlideTransition(
                   position: _textSlideAnimation,
@@ -201,13 +199,11 @@ class _SplashScreenState extends State<SplashScreen>
                     ),
                   ),
                 ),
-
                 const Gap(60),
-
                 // Loading indicator
                 FadeTransition(
                   opacity: _fadeAnimation,
-                  child: Container(
+                  child: SizedBox(
                     width: 40,
                     height: 40,
                     child: CircularProgressIndicator(

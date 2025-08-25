@@ -1,3 +1,4 @@
+import 'package:admin_dashboard/ui/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:gap/gap.dart';
@@ -195,8 +196,9 @@ class _NurseDetailesScreenState extends State<NurseDetailesScreen> {
                     horizontal: 16,
                     vertical: 8,
                   ),
-                  child: Text(
-                    "Assigned Patients",
+                  child: 
+                  CustomText(
+                    text: "Assigned Patients",
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
@@ -204,6 +206,7 @@ class _NurseDetailesScreenState extends State<NurseDetailesScreen> {
                       letterSpacing: 0.5,
                     ),
                   ),
+                
                 ),
                 StreamBuilder<List<AdminPatientsListModel>>(
                   stream: _bloc.nurseAssignedPatientsListStream,
