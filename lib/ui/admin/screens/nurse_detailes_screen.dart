@@ -1,4 +1,5 @@
 import 'package:admin_dashboard/ui/widgets/custom_text.dart';
+import 'package:admin_dashboard/ui/widgets/nurse_details.dart';
 import 'package:flutter/material.dart';
 import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:gap/gap.dart';
@@ -18,8 +19,6 @@ class NurseDetailesScreen extends StatefulWidget {
 }
 
 class _NurseDetailesScreenState extends State<NurseDetailesScreen> {
-  List<Map<String, String>> assignedPatients = [];
-
   final AdminBloc _bloc = AdminBloc();
 
   @override
@@ -30,103 +29,6 @@ class _NurseDetailesScreenState extends State<NurseDetailesScreen> {
 
   callApi() async {
     await _bloc.getPatientsByNurseId(nurseId: widget.nurse.userId ?? "");
-  }
-
-  Widget _nurseDetailView() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: SizedBox(
-        height: 100, // Kept to handle vertical space
-        child: ClipRect(
-          // Added to clip Hero content during animation
-          child: Hero(
-            tag: 'nurse_${widget.nurse.userId ?? widget.nurse.hashCode}',
-            createRectTween: (begin, end) {
-              return MaterialRectCenterArcTween(
-                begin: begin,
-                end: end,
-              ); // Smooth, centered transition
-            },
-            child: Material(
-              type: MaterialType.transparency,
-              child: Container(
-                padding: const EdgeInsets.all(12), // Reduced from 16
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      ColorName.primary.withOpacity(0.9), // #983AFD
-                      ColorName.primary.withOpacity(0.7), // #983AFD
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: ColorName.black.withOpacity(0.15), // #000000
-                      blurRadius: 12,
-                      offset: const Offset(0, 6),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    // Profile Picture
-                    SizedBox(
-                      width: 72, // Match AdminHomescreen
-                      height: 72,
-                      child: CircleAvatar(
-                        radius: 36, // Match AdminHomescreen
-                        backgroundColor: ColorName.white, // #FFFFFF
-                        child: Icon(
-                          Icons.person_rounded,
-                          color: ColorName.primary, // #983AFD
-                          size: 48, // Match AdminHomescreen
-                        ),
-                      ),
-                    ),
-                    const Gap(10), // Reduced from 12
-                    // Name & ID
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            widget.nurse.userName ?? "Unknown Nurse",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: ColorName.white, // #FFFFFF
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                          const Gap(4),
-                          Text(
-                            "Nurse ID: ${widget.nurse.userId ?? 'N/A'}",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: ColorName.white.withOpacity(
-                                0.85,
-                              ), // #FFFFFF
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   @override
@@ -190,14 +92,13 @@ class _NurseDetailesScreenState extends State<NurseDetailesScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _nurseDetailView(),
+                nurseDetailView(widget.nurse),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 8,
                   ),
-                  child: 
-                  CustomText(
+                  child: CustomText(
                     text: "Assigned Patients",
                     style: TextStyle(
                       fontSize: 22,
@@ -206,7 +107,6 @@ class _NurseDetailesScreenState extends State<NurseDetailesScreen> {
                       letterSpacing: 0.5,
                     ),
                   ),
-                
                 ),
                 StreamBuilder<List<AdminPatientsListModel>>(
                   stream: _bloc.nurseAssignedPatientsListStream,
