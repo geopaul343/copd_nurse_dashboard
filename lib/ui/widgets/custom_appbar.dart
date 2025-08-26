@@ -11,7 +11,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final FontWeight titleFontWeight;
   final double titleLetterSpacing;
   final Color iconColor;
-  final double iconSize;
+  final double iconSize; final List<Widget>? actions;
 
   const CustomAppBar({
     Key? key,
@@ -25,7 +25,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.titleFontWeight = FontWeight.w600,
     this.titleLetterSpacing = 0.5,
     this.iconColor = Colors.white, // #FFFFFF
-    this.iconSize = 28,
+    this.iconSize = 28,this.actions,
   }) : super(key: key);
 
   @override
@@ -57,18 +57,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       iconTheme: IconThemeData(
         color: iconColor,
         size: iconSize,
-      ),
+      ),  actions: actions ?? [],
     );
   }
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
-
 // Example usage:
 /*
 CustomAppBar(
-  title: "Select Patients",
+  title: nurse.userName ?? "Nurse Details",
   // Optional overrides:
   elevation: 2,
   gradientColors: [Colors.blue, Colors.purple],
@@ -76,5 +75,25 @@ CustomAppBar(
   titleFontSize: 20,
   iconColor: Colors.grey,
   iconSize: 24,
+  actions: [
+    IconButton(
+      icon: const Icon(
+        Icons.add_circle_outline_rounded,
+        color: Colors.white, // #FFFFFF
+        size: 28,
+      ),
+      tooltip: 'Add Patient',
+      onPressed: () async {
+        final result = await Navigator.pushNamed(
+          context,
+          PatientListToAddNurseScreen.path,
+          arguments: nurse,
+        );
+        if (result == true) {
+          callApi();
+        }
+      },
+    ),
+  ],
 )
 */

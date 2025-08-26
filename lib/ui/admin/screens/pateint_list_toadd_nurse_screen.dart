@@ -1,15 +1,13 @@
 import 'package:admin_dashboard/data/nurse/model/admin/admin_patients_list_model.dart';
 import 'package:admin_dashboard/data/nurse/model/admin/nurse_list_model.dart';
-import 'package:admin_dashboard/data/nurse/network/url.dart';
 import 'package:admin_dashboard/gen/colors.gen.dart';
 import 'package:admin_dashboard/ui/widgets/custom_appbar.dart';
 import 'package:admin_dashboard/ui/widgets/custom_patientlist_view.dart';
 import 'package:admin_dashboard/ui/widgets/custom_patient_assignment_button.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import '../bloc/admin_bloc.dart';
 
-// TODO: Fix filename typo from "pateint" to "patient"
+
 class PatientListToAddNurseScreen extends StatefulWidget {
   static const String path = '/patient-list-to-add-nurse';
   final NursesList? nurseItem;

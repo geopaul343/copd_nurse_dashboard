@@ -75,7 +75,7 @@ class AdminBloc {
         nurseId: nurseId,
       );
       _nurseAssignedPatientsStreamController.add(result);
-      print(result);
+      print(   " get patients by nurse userid ${result}"    );
     } catch (e) {
       print("Errorr===>$e");
       _nurseAssignedPatientsStreamController.addError(e);
